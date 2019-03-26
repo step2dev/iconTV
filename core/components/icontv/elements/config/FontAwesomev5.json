@@ -2,7 +2,8 @@
     "fonts": {
         "css": "https:\/\/use.fontawesome.com\/releases\/v5.8.1\/css\/all.css",
         "integrity": "sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf",
-        "crossorigin": "anonymous"
+        "crossorigin": "anonymous",
+        "catalog": false
     },
     "keys": [
         "fab fa-accessible-icon",
@@ -756,12 +757,8 @@
         "fas fa-heart",
         "far fa-heart",
         "fas fa-heartbeat",
-        "fas fa-home",
-        "fas fa-hospital",
         "far fa-hospital",
-        "fas fa-image",
         "far fa-image",
-        "fas fa-images",
         "far fa-images",
         "fas fa-industry",
         "fas fa-info",
@@ -770,9 +767,7 @@
         "fas fa-leaf",
         "fas fa-lemon",
         "far fa-lemon",
-        "fas fa-life-ring",
         "far fa-life-ring",
-        "fas fa-lightbulb",
         "far fa-lightbulb",
         "fas fa-location-arrow",
         "fas fa-low-vision",
@@ -785,7 +780,6 @@
         "fas fa-map-pin",
         "fas fa-map-signs",
         "fas fa-medkit",
-        "fas fa-money-bill-alt",
         "far fa-money-bill-alt",
         "fas fa-motorcycle",
         "fas fa-music",
@@ -798,7 +792,6 @@
         "fas fa-plane",
         "fas fa-plug",
         "fas fa-plus",
-        "fas fa-plus-square",
         "far fa-plus-square",
         "fas fa-print",
         "fas fa-recycle",

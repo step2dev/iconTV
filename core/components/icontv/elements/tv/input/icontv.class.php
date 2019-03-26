@@ -20,7 +20,14 @@ if (!class_exists('iconTvInputRender')) {
                 $link .= !empty($config->fonts->integrity) ? 'integrity="' . $config->fonts->integrity . '"' : '';
                 $link .= !empty($config->fonts->crossorigin) ? 'crossorigin="' . $config->fonts->crossorigin . '"' : '';
                 $link .= '>';
-                $icons = json_encode($config->keys,JSON_PRETTY_PRINT);
+                $icons = (array)$config->keys;
+                if (empty($config->fonts->catalog) || ($config->fonts->catalog===false)) {
+                    $icons = array_values(array_unique($icons));
+                    sort($icons);
+                }
+
+                $icons = json_encode($icons, JSON_PRETTY_PRINT);
+
                 $icontvjs = $this->modx->getOption('assets_url') . 'components/icontv/js/mgr/icontv.js';
                 if (file_exists(MODX_BASE_PATH . $icontvjs))
                     $icontvjs = $icontvjs . '?v=' . filemtime(MODX_BASE_PATH . $icontvjs);
