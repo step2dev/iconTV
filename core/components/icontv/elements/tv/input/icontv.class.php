@@ -21,19 +21,23 @@ if (!class_exists('iconTvInputRender')) {
                 $link .= !empty($config->fonts->crossorigin) ? 'crossorigin="' . $config->fonts->crossorigin . '"' : '';
                 $link .= '>';
                 $icons = (array)$config->keys;
-                if (empty($config->fonts->catalog) || ($config->fonts->catalog===false)) {
+                if (empty($config->fonts->catalog) || ($config->fonts->catalog === false)) {
                     $icons = array_values(array_unique($icons));
                     sort($icons);
                 }
 
                 $icons = json_encode($icons, JSON_PRETTY_PRINT);
-
                 $icontvjs = $this->modx->getOption('assets_url') . 'components/icontv/js/mgr/icontv.js';
+
                 if (file_exists(MODX_BASE_PATH . $icontvjs))
                     $icontvjs = $icontvjs . '?v=' . filemtime(MODX_BASE_PATH . $icontvjs);
+                $icontvcss = $this->modx->getOption('assets_url').'components/icontv/css/icontv.css';
+                if (file_exists(MODX_BASE_PATH . $icontvcss))
+                    $icontvcss = $icontvcss . '?v=' . filemtime(MODX_BASE_PATH . $icontvcss);
                 $this->modx->regClientStartupScript($icontvjs);
+                $this->modx->regClientCSS($icontvcss);
             }
-            //   $this->modx->regClientCSS($this->modx->getOption('assets_url').'components/icontv/css/mgr.css');
+
 
             $this->setPlaceholder('tv_value', $value);
             $this->setPlaceholder('icons', $icons);
