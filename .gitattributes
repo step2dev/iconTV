@@ -1,0 +1,9 @@
+# https://git-scm.com/book/en/Customizing-Git-Git-Attributes
+
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Export ignores
+#tests export-ignore
+#composer.lock export-ignore
+.github export-ignore
