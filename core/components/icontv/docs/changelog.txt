@@ -1,4 +1,7 @@
 Changelog for icontv.
+1.0.1-beta
+==============
+- fix bugs
 
 1.0.0-beta
 ==============

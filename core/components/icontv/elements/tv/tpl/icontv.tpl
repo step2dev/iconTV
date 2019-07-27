@@ -46,17 +46,21 @@
 
                 jQuery('#tv{$tv->id}-tr .selector-button').click(function () {
                     wrap = jQuery(this).closest('.vertical-tabs-body');
+                    
                     if (wrap.height() < 400) {
-                        if (jQuery(this).hasClass('hide')) {
-                            jQuery(this).removeClass('hide');
-                            wrap.animate({
-                                height: wrap.attr('data-height')
-                            });
+                        if (jQuery(this).find('i').hasClass('fip-icon-down-dir')) {
+                            if (!wrap.data('height')){
+                                wrap.attr('data-height', wrap.height()).animate({
+                                    height: wrap.height() + 280
+                                });
+                            }
                         } else {
-                            jQuery(this).addClass('hide');
-                            wrap.attr('data-height', wrap.height()).animate({
-                                height: wrap.height() + 280
-                            });
+                            if (wrap.data('height')){
+                                wrap.animate({
+                                    height: wrap.attr('data-height')
+                                });
+                                wrap.removeAttr('data-height');
+                            }
                         }
                     }
                 });
