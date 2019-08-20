@@ -36,11 +36,6 @@ if (!class_exists('iconTvInputRender')) {
          */
         public function process($value, array $params = array())
         {
-            echo '<pre>';
-            print_r($params);
-            echo '</pre>';
-            die();
-
             $corepath = MODX_BASE_PATH . '/core/components/icontv/';
             $config_path = $corepath . 'elements/config/';
             $config_file = $config_path . htmlspecialchars($params['icons']) . '.json';
