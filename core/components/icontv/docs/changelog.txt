@@ -1,4 +1,9 @@
 Changelog for icontv.
+1.1.0-beta
+==============
+- Add support MIGX
+- Add lexicon
+
 1.0.1-beta
 ==============
 - fix bugs

@@ -22,22 +22,23 @@
         }
         Ext.applyIf(config,
             {
-                xtype: 'container'
-                , border: false
-                , layout: 'form'
-                , labelAlign: 'top'
-                , labelSeparator: ''
-                , width: '100%'
-                , anchorSize: {width: '98%', height: 'auto'},
+                xtype: 'container',
+                border: false,
+                layout: 'form',
+                labelAlign: 'top',
+                labelSeparator: '',
+                width: '100%',
+                anchorSize: {width: '98%', height: 'auto'},
                 hideLabel: true,
                 items: [{
                     xtype: 'combo',
-                    fieldLabel: 'icons',
+                    fieldLabel: _('iconstv.desc'),
                     name: 'inopt_icons',
                     hiddenName: 'inopt_icons',
                     id: 'inopt_icons{/literal}{$tv}{literal}',
                     autoSelect: true,
                     allowBlank: false,
+                    autoHeight: true,
                     editable: false,
                     triggerAction: 'all',
                     typeAhead: true,

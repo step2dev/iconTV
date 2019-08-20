@@ -1,14 +1,46 @@
 <?php
+/**
+ * IconTv Input Render
+ *
+ * @package icontv
+ * @subpackage input_render
+ */
 if (!class_exists('iconTvInputRender')) {
     class iconTvInputRender extends modTemplateVarInputRender
     {
+        /**
+         * Return the template path to load
+         *
+         * @return string
+         */
         public function getTemplate()
         {
             return $this->modx->getOption('core_path') . 'components/icontv/elements/tv/tpl/icontv.tpl';
         }
+        /**
+         * Get lexicon topics
+         *
+         * @return array
+         */
+        public function getLexiconTopics()
+        {
+            return array('icontv:default');
+        }
 
+        /**
+         * Process Input Render
+         *
+         * @param string $value
+         * @param array $params
+         * @return void
+         */
         public function process($value, array $params = array())
         {
+            echo '<pre>';
+            print_r($params);
+            echo '</pre>';
+            die();
+
             $corepath = MODX_BASE_PATH . '/core/components/icontv/';
             $config_path = $corepath . 'elements/config/';
             $config_file = $config_path . htmlspecialchars($params['icons']) . '.json';
@@ -25,19 +57,8 @@ if (!class_exists('iconTvInputRender')) {
                     $icons = array_values(array_unique($icons));
                     sort($icons);
                 }
-
                 $icons = json_encode($icons, JSON_PRETTY_PRINT);
-                $icontvjs = $this->modx->getOption('assets_url') . 'components/icontv/js/mgr/icontv.js';
-
-                if (file_exists(MODX_BASE_PATH . $icontvjs))
-                    $icontvjs = $icontvjs . '?v=' . filemtime(MODX_BASE_PATH . $icontvjs);
-                $icontvcss = $this->modx->getOption('assets_url').'components/icontv/css/icontv.css';
-                if (file_exists(MODX_BASE_PATH . $icontvcss))
-                    $icontvcss = $icontvcss . '?v=' . filemtime(MODX_BASE_PATH . $icontvcss);
-                $this->modx->regClientStartupScript($icontvjs);
-                $this->modx->regClientCSS($icontvcss);
             }
-
 
             $this->setPlaceholder('tv_value', $value);
             $this->setPlaceholder('icons', $icons);
