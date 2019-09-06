@@ -9,7 +9,7 @@
 class IconTvTVsGetListProcessor extends modObjectGetListProcessor
 {
     public $classKey = 'modTemplateVar';
-    public $languageTopics = array('colorpicker:default');
+    public $languageTopics = array('icontv:default');
     public $defaultSortField = 'name';
     public $defaultSortDirection = 'ASC';
     public $objectType = 'modTemplateVar';
