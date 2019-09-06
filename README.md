@@ -2,3 +2,5 @@
 https://modstore.pro/packages/other/icontv
 
 ![https://finiv.in.ua/assets/files/iconv.jpg](https://finiv.in.ua/assets/files/iconv.jpg)
+
+translate - https://crowdin.com/project/icontv
