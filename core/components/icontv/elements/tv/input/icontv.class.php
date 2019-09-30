@@ -17,6 +17,7 @@ if (!class_exists('iconTvInputRender')) {
         {
             return $this->modx->getOption('core_path') . 'components/icontv/elements/tv/tpl/icontv.tpl';
         }
+
         /**
          * Get lexicon topics
          *
@@ -36,10 +37,24 @@ if (!class_exists('iconTvInputRender')) {
          */
         public function process($value, array $params = array())
         {
-            $corepath = MODX_BASE_PATH . '/core/components/icontv/';
-            $config_path = $corepath . 'elements/config/';
+            $corepath = $this->modx->getOption('icontv.core.path', null, MODX_CORE_PATH . 'components/icontv/');
+            if (!is_dir($corepath)) {
+                $corepath = MODX_CORE_PATH . 'components/icontv/';
+            }
+
+            $iconsPerPage = $this->modx->getOption('icontv.icons.per.page', null, 20);
+            $iconsAutoClose = (int)$this->modx->getOption('icontv.auto.close', null, true);
+            $emptyIcon = (int)$this->modx->getOption('icontv.empty.icon', null, true);
+            $destroy = (int)$this->modx->getOption('icontv.destroy.api', null, true);
+            $config_path = $this->modx->getOption('icontv.path.config', '', $corepath . 'elements/config/');
+            if (!is_dir($config_path)) {
+                $config_path = $corepath . 'elements/config/';
+            }
+
             $config_file = $config_path . htmlspecialchars($params['icons']) . '.json';
+            $noSearch = isset($params['noSearch']) ? 0 : 1;
             $icons = '{}';
+
             $link = '';
             if (file_exists($config_file) && (filesize($config_file) > 0)) {
                 $config = json_decode(file_get_contents($config_file));
@@ -54,10 +69,15 @@ if (!class_exists('iconTvInputRender')) {
                 }
                 $icons = json_encode($icons, JSON_PRETTY_PRINT);
             }
-
             $this->setPlaceholder('tv_value', $value);
             $this->setPlaceholder('icons', $icons);
+
             $this->setPlaceholder('font_css', $link);
+            $this->setPlaceholder('iconsPerPage', $iconsPerPage);
+            $this->setPlaceholder('iconsAutoClose', $iconsAutoClose);
+            $this->setPlaceholder('noSearch', $noSearch);
+            $this->setPlaceholder('emptyIcon', $emptyIcon);
+            $this->setPlaceholder('destroy', $destroy);
         }
     }
 }

@@ -45,4 +45,8 @@ switch ($modx->event->name) {
     case 'OnDocFormRender':
         $icontv->includeScriptAssets();
         break;
+    case 'OnTempFormRender':
+        $icontv->includeScriptAssets();
+        $icontv->includeInTemplate();
+        break;
 }

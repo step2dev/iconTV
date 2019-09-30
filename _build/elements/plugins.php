@@ -11,6 +11,7 @@ return [
             'OnTVInputPropertiesList' => [],
             'OnTVOutputRenderPropertiesList' => [],
             'OnDocFormRender' => [],
+            'OnTempFormRender' => [],
         ],
     ],
 ];

@@ -1,3 +1,16 @@
-.icons-selector.fip-grey .selector-popup{
-    margin-bottom: 10px;
+.icons-selector.fip-grey .selector-popup {
+    margin-bottom: 10px
+}
+.destroy-button-destroy,
+.destroy-button-restore {
+    color: #fff;
+    padding: 6px 12px;
+    border: 1px solid transparent;
+    border-radius: 4px
+}
+.destroy-button-destroy {
+    background-color: #d9534f
+}
+.destroy-button-restore {
+    background-color: #5cb85c
 }

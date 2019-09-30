@@ -5,9 +5,11 @@
     var iconTv = function (config) {
         config = config || {};
         config.connectorUrl = {/literal}{$connector}{literal};
-        config.default = {/literal}{$tv_input_properties}{literal};
+        config.default_icons = {/literal}{$default_icons}{literal};
+        config.default_noSearch = {/literal}{$default_noSearch}{literal};
         iconTv.superclass.constructor.call(this, config);
     };
+
     Ext.extend(iconTv, Ext.Component, {
         page: {}, window: {}, grid: {}, tree: {}, panel: {}, combo: {}, config: {}, view: {}, utils: {},
 
@@ -60,7 +62,7 @@
                     }),
                     displayField: 'name',
                     valueField: 'name',
-                    defaultValue: iconTv.default,
+                    defaultValue: iconTv.default_icons,
                     listeners: {
                         success: {
                             fn: function () {
@@ -73,13 +75,19 @@
                             }, scope: this
                         },
                         afterrender: function (r) {
-                            console.log(r);
+                            //console.log(r);
                             //So now we are going to set the combobox value here.
                             //I just simply used my default value in the combobox definition but it's possible to query from combobox store also.
                             //For example: store.getAt('0').get('id'); according to Brik's answer.
                             this.setValue(this.defaultValue);
                         }
                     }
+                },{
+                    xtype: 'checkbox',
+                    name: 'inopt_noSearch',
+                    inputValue: 'true',
+                    boxLabel: _('iconstv.noSearch'),
+                    checked: iconTv.default_noSearch
                 }]
             }
         );

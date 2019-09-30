@@ -8,6 +8,4 @@
 
 $_lang['icons'] = 'Icons';
 $_lang['iconstv.desc'] = 'Select icons support';
-$_lang['iconstv.emptyIcon'] = 'empty icon';
-$_lang['iconstv.hasSearch'] = 'Enable search';
-$_lang['iconstv.defaultValue'] = 'Default value';
+$_lang['iconstv.noSearch'] = 'Disable search';
