@@ -180,7 +180,7 @@
             "require": {
                 "php": "^7.0",
                 "phpdocumentor/reflection-common": "^1.0.0",
-                "phpdocumentor/type-resolver": "^0.4.0",
+                "phpdocumentor/type-resolver": "^0.4.0"
             },
             "require-dev": {
                 "doctrine/instantiator": "~1.0.5",
