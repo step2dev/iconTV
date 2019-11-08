@@ -183,7 +183,6 @@
                 "phpdocumentor/type-resolver": "^0.4.0"
             },
             "require-dev": {
-                "doctrine/instantiator": "~1.0.5",
                 "mockery/mockery": "^1.0",
                 "phpunit/phpunit": "^6.4"
             },
@@ -275,7 +274,6 @@
                 "shasum": ""
             },
             "require": {
-                "doctrine/instantiator": "^1.0.2",
                 "php": "^5.3|^7.0",
                 "phpdocumentor/reflection-docblock": "^2.0|^3.0.2|^4.0"
             },
@@ -586,7 +584,6 @@
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
                 "ext-xml": "*",
-                "myclabs/deep-copy": "^1.7",
                 "phar-io/manifest": "^1.0.2",
                 "phar-io/version": "^2.0",
                 "php": "^7.1",
