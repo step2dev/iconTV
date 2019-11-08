@@ -336,13 +336,13 @@
             "require": {
                 "ext-dom": "*",
                 "ext-xmlwriter": "*",
-                "php": "^5.6",
+                "php": "^7.1",
                 "phpunit/php-file-iterator": "^2.0",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-token-stream": "^3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.6"
+                "phpunit/phpunit": "^7.0"
             },
             "suggest": {
                 "ext-xdebug": "^2.6.0"
@@ -393,7 +393,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6"
+                "php": "^7.1"
             },
             "type": "library",
             "extra": {
@@ -481,7 +481,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6"
+                "php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0"
@@ -531,7 +531,7 @@
             },
             "require": {
                 "ext-tokenizer": "*",
-                "php": "^5.6"
+                "php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0"
