@@ -1,8 +1,6 @@
 {
     "fonts": {
-        "css": "https:\/\/use.fontawesome.com\/releases\/v5.8.1\/css\/all.css",
-        "integrity": "sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf",
-        "crossorigin": "anonymous",
+        "css": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css",
         "catalog": false
     },
     "keys": [
@@ -1171,6 +1169,39 @@
         "fas fa-quote-right",
         "fas fa-sticky-note",
         "far fa-sticky-note",
-        "fas fa-thumbtack"
+        "fas fa-thumbtack",
+        "fas fa-balance-scale-left",
+        "fas fa-balance-scale-right",
+        "fas fa-biking",
+        "fas fa-border-all",
+        "fas fa-border-none",
+        "fas fa-border-style",
+        "fab fa-buy-n-large",
+        "fab fa-cotton-bureau",
+        "fas fa-fan",
+        "fab fa-git-alt",
+        "fas fa-hat-cowboy",
+        "fas fa-hat-cowboy-side",
+        "fas fa-icons",
+        "fab fa-mdb",
+        "fas fa-mouse",
+        "fab fa-orcid",
+        "fas fa-phone-alt",
+        "fas fa-phone-square-alt",
+        "fas fa-photo-video",
+        "fas fa-record-vinyl",
+        "fas fa-remove-format",
+        "fas fa-sort-alpha-down-alt",
+        "fas fa-sort-alpha-up-alt",
+        "fas fa-sort-amount-down-alt",
+        "fas fa-sort-amount-up-alt",
+        "fas fa-sort-numeric-down-alt",
+        "fas fa-sort-numeric-up-alt",
+        "fas fa-spell-check",
+        "fab fa-stackpath",
+        "fab fa-swift",
+        "fab fa-umbraco",
+        "fas fa-voicemail"
+
     ]
 }
