@@ -26,7 +26,7 @@ class iconTv
      * The version
      * @var string $version
      */
-    public $version = '1.1.4';
+    public $version = '1.2.2';
 
     /**
      * The class options

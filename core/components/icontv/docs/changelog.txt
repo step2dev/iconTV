@@ -1,12 +1,19 @@
 Changelog for icontv.
+1.2.2-beta
+==============
+- Update fontawesome v5.8.1 to v5.11.2
+
 1.2.1-beta
 ==============
 - Add destroy and restore buttons
 - Add new setting for disable search
 - Add new system settings (Automatically close, Show destroy button, Show empty icon, Number of icons per page)
 - Add Ukrainian lexicon
-- Add generator icon for template
+- Fix Russian lexicon
+- Fix English lexicon
+- Add generator icon for template (beta)
 - Fix conflict with MODX icons
+- Fix conflict with cmpgeneratorpro
 
 1.1.1-beta
 ==============
