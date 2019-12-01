@@ -1201,7 +1201,10 @@
         "fab fa-stackpath",
         "fab fa-swift",
         "fab fa-umbraco",
-        "fas fa-voicemail"
+        "fas fa-voicemail",
+        "fab fa-font-awesome-flag",
+        "fab fa-font-awesome-alt",
+        "fab fa-font-awesome"
 
     ]
 }
