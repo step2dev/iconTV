@@ -1,4 +1,17 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors',   true);
+//if (!class_exists(modTemplateVarInputRender::class)) {
+//    class modNamespace extends MODX\Revolution\modNamespace
+//    {
+//    }
+//}
+//
+//if (!class_exists(modSystemSetting::class)) {
+//    class modSystemSetting extends MODX\Revolution\modSystemSetting
+//    {
+//    }
+//}
 
 class icontvPackage
 {
@@ -34,25 +47,33 @@ class icontvPackage
         $root = dirname(dirname(__FILE__)) . '/';
         $assets = $root . 'assets/components/' . $config['name_lower'] . '/';
         $core = $root . 'core/components/' . $config['name_lower'] . '/';
+        //print_r('MODX3 support');
+        //var_dump($this->isMODX3());
 
-        $this->config = array_merge([
-            'log_level' => modX::LOG_LEVEL_INFO,
-            'log_target' => XPDO_CLI_MODE ? 'ECHO' : 'HTML',
+        $this->config = array_merge(
+            [
+                'log_level' => modX::LOG_LEVEL_INFO,
+                'log_target' => XPDO_CLI_MODE ? 'ECHO' : 'HTML',
 
-            'root' => $root,
-            'build' => $root . '_build/',
-            'elements' => $root . '_build/elements/',
-            'resolvers' => $root . '_build/resolvers/',
+                'root' => $root,
+                'build' => $root . '_build/',
+                'elements' => $root . '_build/elements/',
+                'resolvers' => $root . '_build/resolvers/',
 
-            'assets' => $assets,
-            'core' => $core,
-        ], $config);
+                'assets' => $assets,
+                'core' => $core,
+            ],
+            $config
+        );
         $this->modx->setLogLevel($this->config['log_level']);
         $this->modx->setLogTarget($this->config['log_target']);
 
         $this->initialize();
     }
 
+    protected function isMODX3(){
+        return $this->modx->version->version > 3;
+    }
 
     /**
      * Initialize package builder
@@ -61,7 +82,12 @@ class icontvPackage
     {
         $this->builder = $this->modx->getService('transport.modPackageBuilder');
         $this->builder->createPackage($this->config['name_lower'], $this->config['version'], $this->config['release']);
-        $this->builder->registerNamespace($this->config['name_lower'], false, true, '{core_path}components/' . $this->config['name_lower'] . '/');
+        $this->builder->registerNamespace(
+            $this->config['name_lower'],
+            false,
+            true,
+            '{core_path}components/' . $this->config['name_lower'] . '/'
+        );
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Created Transport Package and Namespace.');
 
         $this->category = $this->modx->newObject('modCategory');
@@ -76,6 +102,90 @@ class icontvPackage
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Created main Category.');
     }
 
+    /**
+     * @return modPackageBuilder
+     */
+    public function process()
+    {
+        $this->model();
+        $this->assets();
+
+        // Add elements
+        $elements = scandir($this->config['elements']);
+        foreach ($elements as $element) {
+            if (in_array($element[0], ['_', '.'])) {
+                continue;
+            }
+            $name = preg_replace('#\.php$#', '', $element);
+            if (method_exists($this, $name)) {
+                $this->{$name}();
+            }
+        }
+
+        // Create main vehicle
+        /** @var modTransportVehicle $vehicle */
+        $vehicle = $this->builder->createVehicle($this->category, $this->category_attributes);
+
+        // Files resolvers
+        $vehicle->resolve(
+            'file',
+            [
+                'source' => $this->config['core'],
+                'target' => "return MODX_CORE_PATH . 'components/';",
+            ]
+        );
+        $vehicle->resolve(
+            'file',
+            [
+                'source' => $this->config['assets'],
+                'target' => "return MODX_ASSETS_PATH . 'components/';",
+            ]
+        );
+
+        // Add resolvers into vehicle
+        $resolvers = scandir($this->config['resolvers']);
+        // Remove Office files
+        if (!in_array('office', $resolvers)) {
+            if ($cache = $this->modx->getCacheManager()) {
+                $dirs = [
+                    $this->config['assets'] . 'js/office',
+                    $this->config['core'] . 'controllers/office',
+                    $this->config['core'] . 'processors/office',
+                ];
+                foreach ($dirs as $dir) {
+                    $cache->deleteTree($dir, ['deleteTop' => true, 'skipDirs' => false, 'extensions' => []]);
+                }
+            }
+            $this->modx->log(modX::LOG_LEVEL_INFO, 'Deleted Office files');
+        }
+        foreach ($resolvers as $resolver) {
+            if (in_array($resolver[0], ['_', '.'])) {
+                continue;
+            }
+            if ($vehicle->resolve('php', ['source' => $this->config['resolvers'] . $resolver])) {
+                $this->modx->log(modX::LOG_LEVEL_INFO, 'Added resolver ' . preg_replace('#\.php$#', '', $resolver));
+            }
+        }
+        $this->builder->putVehicle($vehicle);
+
+        $this->builder->setPackageAttributes(
+            [
+                'changelog' => file_get_contents($this->config['core'] . 'docs/changelog.txt'),
+                'license' => file_get_contents($this->config['core'] . 'docs/license.txt'),
+                'readme' => file_get_contents($this->config['core'] . 'docs/readme.txt'),
+            ]
+        );
+        $this->modx->log(modX::LOG_LEVEL_INFO, 'Added package attributes and setup options.');
+
+        $this->modx->log(modX::LOG_LEVEL_INFO, 'Packing up transport package zip...');
+        $this->builder->pack();
+
+        if (!empty($this->config['install'])) {
+            $this->install();
+        }
+
+        return $this->builder;
+    }
 
     /**
      * Update the model
@@ -105,7 +215,6 @@ class icontvPackage
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Model updated');
     }
 
-
     /**
      * Install nodejs and update assets
      */
@@ -117,14 +226,19 @@ class icontvPackage
             if (file_exists($this->config['build'] . 'package.json')) {
                 $this->modx->log(modX::LOG_LEVEL_INFO, 'Trying to install or update nodejs dependencies');
                 $output = [
-                    shell_exec('cd ' . $this->config['build'] . ' && npm config set scripts-prepend-node-path true && npm install'),
+                    shell_exec(
+                        'cd ' . $this->config['build'] . ' && npm config set scripts-prepend-node-path true && npm install'
+                    ),
                 ];
             }
             if (file_exists($this->config['build'] . 'gulpfile.js')) {
-                $output = array_merge($output, [
-                    shell_exec('cd ' . $this->config['build'] . ' && npm link gulp'),
-                    shell_exec('cd ' . $this->config['build'] . ' && gulp copy'),
-                ]);
+                $output = array_merge(
+                    $output,
+                    [
+                        shell_exec('cd ' . $this->config['build'] . ' && npm link gulp'),
+                        shell_exec('cd ' . $this->config['build'] . ' && gulp copy'),
+                    ]
+                );
             }
             if ($output) {
                 $this->modx->log(xPDO::LOG_LEVEL_INFO, implode("\n", array_map('trim', $output)));
@@ -136,6 +250,48 @@ class icontvPackage
         }
     }
 
+    /**
+     *  Install package
+     */
+    protected function install()
+    {
+        $signature = $this->builder->getSignature();
+        $sig = explode('-', $signature);
+        $versionSignature = explode('.', $sig[1]);
+
+        /** @var modTransportPackage $package */
+        if (!$package = $this->modx->getObject('transport.modTransportPackage', ['signature' => $signature])) {
+            $package = $this->modx->newObject('transport.modTransportPackage');
+            $package->set('signature', $signature);
+            $package->fromArray(
+                [
+                    'created' => date('Y-m-d h:i:s'),
+                    'updated' => null,
+                    'state' => 1,
+                    'workspace' => 1,
+                    'provider' => 0,
+                    'source' => $signature . '.transport.zip',
+                    'package_name' => $this->config['name'],
+                    'version_major' => $versionSignature[0],
+                    'version_minor' => !empty($versionSignature[1]) ? $versionSignature[1] : 0,
+                    'version_patch' => !empty($versionSignature[2]) ? $versionSignature[2] : 0,
+                ]
+            );
+            if (!empty($sig[2])) {
+                $r = preg_split('#([0-9]+)#', $sig[2], -1, PREG_SPLIT_DELIM_CAPTURE);
+                if (is_array($r) && !empty($r)) {
+                    $package->set('release', $r[0]);
+                    $package->set('release_index', (isset($r[1]) ? $r[1] : '0'));
+                } else {
+                    $package->set('release', $sig[2]);
+                }
+            }
+            $package->save();
+        }
+        if ($package->install()) {
+            $this->modx->runProcessor('system/clearcache');
+        }
+    }
 
     /**
      * Add settings
@@ -158,16 +314,23 @@ class icontvPackage
         foreach ($settings as $name => $data) {
             /** @var modSystemSetting $setting */
             $setting = $this->modx->newObject('modSystemSetting');
-            $setting->fromArray(array_merge([
-                'key' => $this->config['name_lower'] . '_' . $name,
-                'namespace' => $this->config['name_lower'],
-            ], $data), '', true, true);
+            $setting->fromArray(
+                array_merge(
+                    [
+                        'key' => $this->config['name_lower'] . '_' . $name,
+                        'namespace' => $this->config['name_lower'],
+                    ],
+                    $data
+                ),
+                '',
+                true,
+                true
+            );
             $vehicle = $this->builder->createVehicle($setting, $attributes);
             $this->builder->putVehicle($vehicle);
         }
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($settings) . ' System Settings');
     }
-
 
     /**
      * Add menus
@@ -191,22 +354,29 @@ class icontvPackage
             foreach ($menus as $name => $data) {
                 /** @var modMenu $menu */
                 $menu = $this->modx->newObject('modMenu');
-                $menu->fromArray(array_merge([
-                    'text' => $name,
-                    'parent' => 'components',
-                    'namespace' => $this->config['name_lower'],
-                    'icon' => '',
-                    'menuindex' => 0,
-                    'params' => '',
-                    'handler' => '',
-                ], $data), '', true, true);
+                $menu->fromArray(
+                    array_merge(
+                        [
+                            'text' => $name,
+                            'parent' => 'components',
+                            'namespace' => $this->config['name_lower'],
+                            'icon' => '',
+                            'menuindex' => 0,
+                            'params' => '',
+                            'handler' => '',
+                        ],
+                        $data
+                    ),
+                    '',
+                    true,
+                    true
+                );
                 $vehicle = $this->builder->createVehicle($menu, $attributes);
                 $this->builder->putVehicle($vehicle);
             }
         }
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($menus) . ' Menus');
     }
-
 
     /**
      * Add Dashboard Widgets
@@ -228,17 +398,24 @@ class icontvPackage
         foreach ($widgets as $name => $data) {
             /** @var modDashboardWidget $widget */
             $widget = $this->modx->newObject('modDashboardWidget');
-            $widget->fromArray(array_merge([
-                'name' => $name,
-                'namespace' => 'core',
-                'lexicon' => 'core:dashboards',
-            ], $data), '', true, true);
+            $widget->fromArray(
+                array_merge(
+                    [
+                        'name' => $name,
+                        'namespace' => 'core',
+                        'lexicon' => 'core:dashboards',
+                    ],
+                    $data
+                ),
+                '',
+                true,
+                true
+            );
             $vehicle = $this->builder->createVehicle($widget, $attributes);
             $this->builder->putVehicle($vehicle);
         }
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($widgets) . ' Dashboard Widgets');
     }
-
 
     /**
      * Add resources
@@ -283,6 +460,84 @@ class icontvPackage
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($objects) . ' Resources');
     }
 
+    /**
+     * @param array $data
+     * @param string $uri
+     * @param int $parent
+     *
+     * @return array
+     */
+    protected function _addResource(array $data, $uri, $parent = 0)
+    {
+        $file = $data['context_key'] . '/' . $uri;
+        /** @var modResource $resource */
+        $resource = $this->modx->newObject('modResource');
+        $resource->fromArray(
+            array_merge(
+                [
+                    'parent' => $parent,
+                    'published' => true,
+                    'deleted' => false,
+                    'hidemenu' => false,
+                    'createdon' => time(),
+                    'template' => 1,
+                    'isfolder' => !empty($data['isfolder']) || !empty($data['resources']),
+                    'uri' => $uri,
+                    'uri_override' => false,
+                    'richtext' => false,
+                    'searchable' => true,
+                    'content' => $this::_getContent($this->config['core'] . 'elements/resources/' . $file . '.tpl'),
+                ],
+                $data
+            ),
+            '',
+            true,
+            true
+        );
+
+        if (!empty($data['groups'])) {
+            foreach ($data['groups'] as $group) {
+                $resource->joinGroup($group);
+            }
+        }
+        $resources[] = $resource;
+
+        if (!empty($data['resources'])) {
+            $menuindex = 0;
+            foreach ($data['resources'] as $alias => $item) {
+                if (!isset($item['id'])) {
+                    $item['id'] = $this->_idx++;
+                }
+                $item['alias'] = $alias;
+                $item['context_key'] = $data['context_key'];
+                $item['menuindex'] = $menuindex++;
+                $resources = array_merge(
+                    $resources,
+                    $this->_addResource($item, $uri . '/' . $alias, $data['id'])
+                );
+            }
+        }
+
+        return $resources;
+    }
+
+    /**
+     * @param $filename
+     *
+     * @return string
+     */
+    static public function _getContent($filename)
+    {
+        if (file_exists($filename)) {
+            $file = trim(file_get_contents($filename));
+
+            return preg_match('#\<\?php(.*)#is', $file, $data)
+                ? rtrim(rtrim(trim(@$data[1]), '?>'))
+                : $file;
+        }
+
+        return '';
+    }
 
     /**
      * Add plugins
@@ -313,26 +568,44 @@ class icontvPackage
         foreach ($plugins as $name => $data) {
             /** @var modPlugin $plugin */
             $plugin = $this->modx->newObject('modPlugin');
-            $plugin->fromArray(array_merge([
-                'name' => $name,
-                'category' => 0,
-                'description' => @$data['description'],
-                'plugincode' => $this::_getContent($this->config['core'] . 'elements/plugins/' . $data['file'] . '.php'),
-                'static' => !empty($this->config['static']['plugins']),
-                'source' => 1,
-                'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/plugins/' . $data['file'] . '.php',
-            ], $data), '', true, true);
+            $plugin->fromArray(
+                array_merge(
+                    [
+                        'name' => $name,
+                        'category' => 0,
+                        'description' => @$data['description'],
+                        'plugincode' => $this::_getContent(
+                            $this->config['core'] . 'elements/plugins/' . $data['file'] . '.php'
+                        ),
+                        'static' => !empty($this->config['static']['plugins']),
+                        'source' => 1,
+                        'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/plugins/' . $data['file'] . '.php',
+                    ],
+                    $data
+                ),
+                '',
+                true,
+                true
+            );
 
             $events = [];
             if (!empty($data['events'])) {
                 foreach ($data['events'] as $event_name => $event_data) {
                     /** @var modPluginEvent $event */
                     $event = $this->modx->newObject('modPluginEvent');
-                    $event->fromArray(array_merge([
-                        'event' => $event_name,
-                        'priority' => 0,
-                        'propertyset' => 0,
-                    ], $event_data), '', true, true);
+                    $event->fromArray(
+                        array_merge(
+                            [
+                                'event' => $event_name,
+                                'priority' => 0,
+                                'propertyset' => 0,
+                            ],
+                            $event_data
+                        ),
+                        '',
+                        true,
+                        true
+                    );
                     $events[] = $event;
                 }
             }
@@ -344,7 +617,6 @@ class icontvPackage
         $this->category->addMany($objects);
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($objects) . ' Plugins');
     }
-
 
     /**
      * Add snippets
@@ -367,29 +639,41 @@ class icontvPackage
         foreach ($snippets as $name => $data) {
             /** @var modSnippet[] $objects */
             $objects[$name] = $this->modx->newObject('modSnippet');
-            $objects[$name]->fromArray(array_merge([
-                'id' => 0,
-                'name' => $name,
-                'description' => @$data['description'],
-                'snippet' => $this::_getContent($this->config['core'] . 'elements/snippets/' . $data['file'] . '.php'),
-                'static' => !empty($this->config['static']['snippets']),
-                'source' => 1,
-                'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/snippets/' . $data['file'] . '.php',
-            ], $data), '', true, true);
+            $objects[$name]->fromArray(
+                array_merge(
+                    [
+                        'id' => 0,
+                        'name' => $name,
+                        'description' => @$data['description'],
+                        'snippet' => $this::_getContent(
+                            $this->config['core'] . 'elements/snippets/' . $data['file'] . '.php'
+                        ),
+                        'static' => !empty($this->config['static']['snippets']),
+                        'source' => 1,
+                        'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/snippets/' . $data['file'] . '.php',
+                    ],
+                    $data
+                ),
+                '',
+                true,
+                true
+            );
             $properties = [];
             foreach (@$data['properties'] as $k => $v) {
-                $properties[] = array_merge([
-                    'name' => $k,
-                    'desc' => $this->config['name_lower'] . '_prop_' . $k,
-                    'lexicon' => $this->config['name_lower'] . ':properties',
-                ], $v);
+                $properties[] = array_merge(
+                    [
+                        'name' => $k,
+                        'desc' => $this->config['name_lower'] . '_prop_' . $k,
+                        'lexicon' => $this->config['name_lower'] . ':properties',
+                    ],
+                    $v
+                );
             }
             $objects[$name]->setProperties($properties);
         }
         $this->category->addMany($objects);
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($objects) . ' Snippets');
     }
-
 
     /**
      * Add chunks
@@ -412,21 +696,30 @@ class icontvPackage
         foreach ($chunks as $name => $data) {
             /** @var modChunk[] $objects */
             $objects[$name] = $this->modx->newObject('modChunk');
-            $objects[$name]->fromArray(array_merge([
-                'id' => 0,
-                'name' => $name,
-                'description' => @$data['description'],
-                'snippet' => $this::_getContent($this->config['core'] . 'elements/chunks/' . $data['file'] . '.tpl'),
-                'static' => !empty($this->config['static']['chunks']),
-                'source' => 1,
-                'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/chunks/' . $data['file'] . '.tpl',
-            ], $data), '', true, true);
+            $objects[$name]->fromArray(
+                array_merge(
+                    [
+                        'id' => 0,
+                        'name' => $name,
+                        'description' => @$data['description'],
+                        'snippet' => $this::_getContent(
+                            $this->config['core'] . 'elements/chunks/' . $data['file'] . '.tpl'
+                        ),
+                        'static' => !empty($this->config['static']['chunks']),
+                        'source' => 1,
+                        'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/chunks/' . $data['file'] . '.tpl',
+                    ],
+                    $data
+                ),
+                '',
+                true,
+                true
+            );
             $objects[$name]->setProperties(@$data['properties']);
         }
         $this->category->addMany($objects);
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($objects) . ' Chunks');
     }
-
 
     /**
      * Add templates
@@ -450,210 +743,27 @@ class icontvPackage
         foreach ($templates as $name => $data) {
             /** @var modTemplate[] $objects */
             $objects[$name] = $this->modx->newObject('modTemplate');
-            $objects[$name]->fromArray(array_merge([
-                'templatename' => $name,
-                'description' => $data['description'],
-                'content' => $this::_getContent($this->config['core'] . 'elements/templates/' . $data['file'] . '.tpl'),
-                'static' => !empty($this->config['static']['templates']),
-                'source' => 1,
-                'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/templates/' . $data['file'] . '.tpl',
-            ], $data), '', true, true);
+            $objects[$name]->fromArray(
+                array_merge(
+                    [
+                        'templatename' => $name,
+                        'description' => $data['description'],
+                        'content' => $this::_getContent(
+                            $this->config['core'] . 'elements/templates/' . $data['file'] . '.tpl'
+                        ),
+                        'static' => !empty($this->config['static']['templates']),
+                        'source' => 1,
+                        'static_file' => 'core/components/' . $this->config['name_lower'] . '/elements/templates/' . $data['file'] . '.tpl',
+                    ],
+                    $data
+                ),
+                '',
+                true,
+                true
+            );
         }
         $this->category->addMany($objects);
         $this->modx->log(modX::LOG_LEVEL_INFO, 'Packaged in ' . count($objects) . ' Templates');
-    }
-
-
-    /**
-     * @param $filename
-     *
-     * @return string
-     */
-    static public function _getContent($filename)
-    {
-        if (file_exists($filename)) {
-            $file = trim(file_get_contents($filename));
-
-            return preg_match('#\<\?php(.*)#is', $file, $data)
-                ? rtrim(rtrim(trim(@$data[1]), '?>'))
-                : $file;
-        }
-
-        return '';
-    }
-
-
-    /**
-     * @param array $data
-     * @param string $uri
-     * @param int $parent
-     *
-     * @return array
-     */
-    protected function _addResource(array $data, $uri, $parent = 0)
-    {
-        $file = $data['context_key'] . '/' . $uri;
-        /** @var modResource $resource */
-        $resource = $this->modx->newObject('modResource');
-        $resource->fromArray(array_merge([
-            'parent' => $parent,
-            'published' => true,
-            'deleted' => false,
-            'hidemenu' => false,
-            'createdon' => time(),
-            'template' => 1,
-            'isfolder' => !empty($data['isfolder']) || !empty($data['resources']),
-            'uri' => $uri,
-            'uri_override' => false,
-            'richtext' => false,
-            'searchable' => true,
-            'content' => $this::_getContent($this->config['core'] . 'elements/resources/' . $file . '.tpl'),
-        ], $data), '', true, true);
-
-        if (!empty($data['groups'])) {
-            foreach ($data['groups'] as $group) {
-                $resource->joinGroup($group);
-            }
-        }
-        $resources[] = $resource;
-
-        if (!empty($data['resources'])) {
-            $menuindex = 0;
-            foreach ($data['resources'] as $alias => $item) {
-                if (!isset($item['id'])) {
-                    $item['id'] = $this->_idx++;
-                }
-                $item['alias'] = $alias;
-                $item['context_key'] = $data['context_key'];
-                $item['menuindex'] = $menuindex++;
-                $resources = array_merge(
-                    $resources,
-                    $this->_addResource($item, $uri . '/' . $alias, $data['id'])
-                );
-            }
-        }
-
-        return $resources;
-    }
-
-
-    /**
-     *  Install package
-     */
-    protected function install()
-    {
-        $signature = $this->builder->getSignature();
-        $sig = explode('-', $signature);
-        $versionSignature = explode('.', $sig[1]);
-
-        /** @var modTransportPackage $package */
-        if (!$package = $this->modx->getObject('transport.modTransportPackage', ['signature' => $signature])) {
-            $package = $this->modx->newObject('transport.modTransportPackage');
-            $package->set('signature', $signature);
-            $package->fromArray([
-                'created' => date('Y-m-d h:i:s'),
-                'updated' => null,
-                'state' => 1,
-                'workspace' => 1,
-                'provider' => 0,
-                'source' => $signature . '.transport.zip',
-                'package_name' => $this->config['name'],
-                'version_major' => $versionSignature[0],
-                'version_minor' => !empty($versionSignature[1]) ? $versionSignature[1] : 0,
-                'version_patch' => !empty($versionSignature[2]) ? $versionSignature[2] : 0,
-            ]);
-            if (!empty($sig[2])) {
-                $r = preg_split('#([0-9]+)#', $sig[2], -1, PREG_SPLIT_DELIM_CAPTURE);
-                if (is_array($r) && !empty($r)) {
-                    $package->set('release', $r[0]);
-                    $package->set('release_index', (isset($r[1]) ? $r[1] : '0'));
-                } else {
-                    $package->set('release', $sig[2]);
-                }
-            }
-            $package->save();
-        }
-        if ($package->install()) {
-            $this->modx->runProcessor('system/clearcache');
-        }
-    }
-
-
-    /**
-     * @return modPackageBuilder
-     */
-    public function process()
-    {
-        $this->model();
-        $this->assets();
-
-        // Add elements
-        $elements = scandir($this->config['elements']);
-        foreach ($elements as $element) {
-            if (in_array($element[0], ['_', '.'])) {
-                continue;
-            }
-            $name = preg_replace('#\.php$#', '', $element);
-            if (method_exists($this, $name)) {
-                $this->{$name}();
-            }
-        }
-
-        // Create main vehicle
-        /** @var modTransportVehicle $vehicle */
-        $vehicle = $this->builder->createVehicle($this->category, $this->category_attributes);
-
-        // Files resolvers
-        $vehicle->resolve('file', [
-            'source' => $this->config['core'],
-            'target' => "return MODX_CORE_PATH . 'components/';",
-        ]);
-        $vehicle->resolve('file', [
-            'source' => $this->config['assets'],
-            'target' => "return MODX_ASSETS_PATH . 'components/';",
-        ]);
-
-        // Add resolvers into vehicle
-        $resolvers = scandir($this->config['resolvers']);
-        // Remove Office files
-        if (!in_array('office', $resolvers)) {
-            if ($cache = $this->modx->getCacheManager()) {
-                $dirs = [
-                    $this->config['assets'] . 'js/office',
-                    $this->config['core'] . 'controllers/office',
-                    $this->config['core'] . 'processors/office',
-                ];
-                foreach ($dirs as $dir) {
-                    $cache->deleteTree($dir, ['deleteTop' => true, 'skipDirs' => false, 'extensions' => []]);
-                }
-            }
-            $this->modx->log(modX::LOG_LEVEL_INFO, 'Deleted Office files');
-        }
-        foreach ($resolvers as $resolver) {
-            if (in_array($resolver[0], ['_', '.'])) {
-                continue;
-            }
-            if ($vehicle->resolve('php', ['source' => $this->config['resolvers'] . $resolver])) {
-                $this->modx->log(modX::LOG_LEVEL_INFO, 'Added resolver ' . preg_replace('#\.php$#', '', $resolver));
-            }
-        }
-        $this->builder->putVehicle($vehicle);
-
-        $this->builder->setPackageAttributes([
-            'changelog' => file_get_contents($this->config['core'] . 'docs/changelog.txt'),
-            'license' => file_get_contents($this->config['core'] . 'docs/license.txt'),
-            'readme' => file_get_contents($this->config['core'] . 'docs/readme.txt'),
-        ]);
-        $this->modx->log(modX::LOG_LEVEL_INFO, 'Added package attributes and setup options.');
-
-        $this->modx->log(modX::LOG_LEVEL_INFO, 'Packing up transport package zip...');
-        $this->builder->pack();
-
-        if (!empty($this->config['install'])) {
-            $this->install();
-        }
-
-        return $this->builder;
     }
 
 }

@@ -5,6 +5,13 @@
  * @package icontv
  * @subpackage input_render
  */
+
+if (!class_exists(modTemplateVarInputRender::class)) {
+    class modTemplateVarInputRender extends MODX\Revolution\modTemplateVarInputRender
+    {
+    }
+}
+
 if (!class_exists('iconTvInputRender')) {
     class iconTvInputRender extends modTemplateVarInputRender
     {

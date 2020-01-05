@@ -26,7 +26,7 @@ class iconTv
      * The version
      * @var string $version
      */
-    public $version = '1.2.2';
+    public $version = '1.3.0';
 
     /**
      * The class options
@@ -45,31 +45,46 @@ class iconTv
         $this->modx =& $modx;
         $this->namespace = $this->getOption('namespace', $options, $this->namespace);
 
-        $corePath = $this->getOption('core_path', $options, $this->modx->getOption('core_path') . 'components/' . $this->namespace . '/');
-        $assetsPath = $this->getOption('assets_path', $options, $this->modx->getOption('assets_path') . 'components/' . $this->namespace . '/');
-        $assetsUrl = $this->getOption('assets_url', $options, $this->modx->getOption('assets_url') . 'components/' . $this->namespace . '/');
+        $corePath = $this->getOption(
+            'core_path',
+            $options,
+            $this->modx->getOption('core_path') . 'components/' . $this->namespace . '/'
+        );
+        $assetsPath = $this->getOption(
+            'assets_path',
+            $options,
+            $this->modx->getOption('assets_path') . 'components/' . $this->namespace . '/'
+        );
+        $assetsUrl = $this->getOption(
+            'assets_url',
+            $options,
+            $this->modx->getOption('assets_url') . 'components/' . $this->namespace . '/'
+        );
 
         // Load some default paths for easier management
-        $this->options = array_merge(array(
-            'namespace' => $this->namespace,
-            'version' => $this->version,
-            'corePath' => $corePath,
-            'modelPath' => $corePath . 'model/',
-            'vendorPath' => $corePath . 'vendor/',
-            'chunksPath' => $corePath . 'elements/chunks/',
-            'pagesPath' => $corePath . 'elements/pages/',
-            'snippetsPath' => $corePath . 'elements/snippets/',
-            'pluginsPath' => $corePath . 'elements/plugins/',
-            'controllersPath' => $corePath . 'controllers/',
-            'processorsPath' => $corePath . 'processors/',
-            'templatesPath' => $corePath . 'templates/',
-            'assetsPath' => $assetsPath,
-            'assetsUrl' => $assetsUrl,
-            'jsUrl' => $assetsUrl . 'js/',
-            'cssUrl' => $assetsUrl . 'css/',
-            'imagesUrl' => $assetsUrl . 'images/',
-            'connectorUrl' => $assetsUrl . 'connector.php'
-        ), $options);
+        $this->options = array_merge(
+            [
+                'namespace' => $this->namespace,
+                'version' => $this->version,
+                'corePath' => $corePath,
+                'modelPath' => $corePath . 'model/',
+                'vendorPath' => $corePath . 'vendor/',
+                'chunksPath' => $corePath . 'elements/chunks/',
+                'pagesPath' => $corePath . 'elements/pages/',
+                'snippetsPath' => $corePath . 'elements/snippets/',
+                'pluginsPath' => $corePath . 'elements/plugins/',
+                'controllersPath' => $corePath . 'controllers/',
+                'processorsPath' => $corePath . 'processors/',
+                'templatesPath' => $corePath . 'templates/',
+                'assetsPath' => $assetsPath,
+                'assetsUrl' => $assetsUrl,
+                'jsUrl' => $assetsUrl . 'js/',
+                'cssUrl' => $assetsUrl . 'css/',
+                'imagesUrl' => $assetsUrl . 'images/',
+                'connectorUrl' => $assetsUrl . 'connector.php'
+            ],
+            $options
+        );
 
         // Set default options
         $this->options = array_merge($this->options, array());
@@ -92,11 +107,9 @@ class iconTv
         if (!empty($key) && is_string($key)) {
             if ($options != null && array_key_exists($key, $options)) {
                 $option = $options[$key];
-            }
-            elseif (array_key_exists($key, $this->options)) {
+            } elseif (array_key_exists($key, $this->options)) {
                 $option = $this->options[$key];
-            }
-            elseif (array_key_exists("{$this->namespace}.{$key}", $this->modx->config)) {
+            } elseif (array_key_exists("{$this->namespace}.{$key}", $this->modx->config)) {
                 $option = $this->modx->getOption("{$this->namespace}.{$key}");
             }
         }
@@ -115,14 +128,16 @@ class iconTv
         $cssSourceUrl = $assetsUrl . '../../../source/css/mgr/';
         $corePath = $this->getOption('corePath');
 
-        $this->modx->controller->addHtml('<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        $this->modx->controller->addHtml(
+            '<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
         <!-- base | always include -->
         <link rel="stylesheet" type="text/css" href="/assets/components/icontv/css/mgr/base/jquery.fonticonpicker.min.css">
          
         <!-- default grey-theme -->
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/@fonticonpicker/fonticonpicker@3.0.0-alpha.0/dist/css/themes/grey-theme/jquery.fonticonpicker.grey.min.css">
         <script type="text/javascript" src="https://unpkg.com/@fonticonpicker/fonticonpicker/dist/js/jquery.fonticonpicker.min.js"></script>  
-        ');
+        '
+        );
 
         //<link rel="stylesheet" type="text/css" href="https://unpkg.com/@fonticonpicker/fonticonpicker@3.0.0-alpha.0/dist/css/themes/bootstrap-theme/jquery.fonticonpicker.bootstrap.min.css">
         //<link rel="stylesheet" type="text/css" href="https://unpkg.com/@fonticonpicker/fonticonpicker@3.0.0-alpha.0/dist/css/themes/dark-grey-theme/jquery.fonticonpicker.darkgrey.min.css">
@@ -133,9 +148,9 @@ class iconTv
         if ($this->getOption('debug') && $assetsUrl != MODX_ASSETS_URL . 'components/icontv/') {
             $this->modx->controller->addJavascript($jsSourceUrl . 'icontv.js?v=v' . $this->version);
             $this->modx->controller->addCss($cssSourceUrl . 'icontv.css?v=v' . $this->version);
-        }
-        else {
+        } else {
             $this->modx->controller->addJavascript($jsUrl . 'icontv.js?v=v' . $this->version);
+            $this->modx->controller->addJavascript($jsUrl . 'icontvSVG.js?v=v' . $this->version);
             $this->modx->controller->addLastJavascript($jsUrl . 'icontv.jquery.js?v=v' . $this->version);
             $this->modx->controller->addCss($cssUrl . 'icontv.css?v=v' . $this->version);
         }
@@ -252,7 +267,6 @@ class iconTv
                     'view-tile',
                 ];
                 if (preg_match_all($regex, $css, $matches)) {
-
                     $icons = array_diff($matches[1], $excludeClasses);
                     foreach ($icons as $icon) {
                         $BaseIcon[] = $outputPrefix . $icon;
@@ -261,8 +275,7 @@ class iconTv
                 $BaseIcon = array_values(array_unique($BaseIcon));
                 if ($BaseIcon) {
                     $provider->set($cacheKey, $BaseIcon, 0);
-                }
-                else {
+                } else {
                     $this->modx->log(modX::LOG_LEVEL_ERROR, '[fontAwesomeInputOptions] could not get css source!');
                 }
             }
@@ -270,13 +283,16 @@ class iconTv
             $iconsAutoClose = (int)$this->modx->getOption('icontv.auto.close', null, true);
             $emptyIcon = (int)$this->modx->getOption('icontv.empty.icon', null, true);
             $BaseIcon = json_encode($BaseIcon, JSON_PRETTY_PRINT);
-            $this->modx->controller->addHtml("<script>
+            $this->modx->controller->addHtml(
+                "<script>
                 var iconTvTemplate = {};
                     iconTvTemplate.iconsPerPage = '" . $iconsPerPage . "';
                     iconTvTemplate.iconsAutoClose = '" . $iconsAutoClose . "';
                     iconTvTemplate.emptyIcon = '" . $emptyIcon . "';
                     iconTvTemplate.baseicon = '" . $BaseIcon . "';
-            </script>");
+                    
+            </script>"
+            );
         }
     }
 }

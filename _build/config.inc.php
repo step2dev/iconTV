@@ -11,7 +11,7 @@ if (!defined('MODX_CORE_PATH')) {
 return [
     'name' => 'icontv',
     'name_lower' => 'icontv',
-    'version' => '1.2.2',
+    'version' => '1.3.0',
     'release' => 'beta',
     // Install package to site right after build
     'install' => true,

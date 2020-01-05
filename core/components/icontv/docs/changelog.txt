@@ -1,4 +1,11 @@
 Changelog for icontv.
+
+1.3.0
+- Add support MODX3 but no update builder
+- Add few missed icons
+- Add support SVG (Works incorrectly)
+- Bug fix
+
 1.2.2-beta
 ==============
 - Update fontawesome v5.8.1 to v5.11.2
