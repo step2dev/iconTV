@@ -12,6 +12,6 @@
 [![Contributors](https://img.shields.io/github/contributors/CrazyBoy49z/iconTV.svg)](https://github.com/CrazyBoy49z/iconTV/graphs/contributors) 
 ![GitHub last commit](https://img.shields.io/github/last-commit/CrazyBoy49z/iconTV)
 
-![https://finiv.in.ua/assets/files/iconv.jpg](https://finiv.in.ua/assets/files/iconv.jpg)
+![https://file.finiv.in.ua/assets/files/iconv.jpg](https://finiv.in.ua/assets/files/iconv.jpg)
 
 translate - https://crowdin.com/project/icontv
