@@ -26,7 +26,7 @@ class iconTv
      * The version
      * @var string $version
      */
-    public $version = '1.3.0';
+    public $version = '1.3.2';
 
     /**
      * The class options
@@ -148,6 +148,8 @@ class iconTv
         if ($this->getOption('debug') && $assetsUrl != MODX_ASSETS_URL . 'components/icontv/') {
             $this->modx->controller->addJavascript($jsSourceUrl . 'icontv.js?v=v' . $this->version);
             $this->modx->controller->addCss($cssSourceUrl . 'icontv.css?v=v' . $this->version);
+            $this->modx->controller->addLastJavascript($jsUrl . 'icontv.jquery.js?v=v' . $this->version);
+            
         } else {
             $this->modx->controller->addJavascript($jsUrl . 'icontv.js?v=v' . $this->version);
             $this->modx->controller->addJavascript($jsUrl . 'icontvSVG.js?v=v' . $this->version);
@@ -164,6 +166,7 @@ class iconTv
             $provider = $this->modx->cacheManager->getCacheProvider('default');
             $cacheKey = 'manager-icon';
             $BaseIcon = $provider->get($cacheKey);
+           
             if (!$BaseIcon) {
                 $baseCSS = MODX_BASE_PATH . '/manager/templates/default/css/index.css';
                 $regexPrefix = 'icon-';
@@ -274,25 +277,28 @@ class iconTv
                 }
                 $BaseIcon = array_values(array_unique($BaseIcon));
                 if ($BaseIcon) {
+                    $BaseIcon = json_encode($BaseIcon, JSON_PRETTY_PRINT);
                     $provider->set($cacheKey, $BaseIcon, 0);
                 } else {
                     $this->modx->log(modX::LOG_LEVEL_ERROR, '[fontAwesomeInputOptions] could not get css source!');
                 }
             }
+
             $iconsPerPage = $this->modx->getOption('icontv.icons.per.page', null, 20);
             $iconsAutoClose = (int)$this->modx->getOption('icontv.auto.close', null, true);
             $emptyIcon = (int)$this->modx->getOption('icontv.empty.icon', null, true);
-            $BaseIcon = json_encode($BaseIcon, JSON_PRETTY_PRINT);
+          
             $this->modx->controller->addHtml(
                 "<script>
-                var iconTvTemplate = {};
-                    iconTvTemplate.iconsPerPage = '" . $iconsPerPage . "';
-                    iconTvTemplate.iconsAutoClose = '" . $iconsAutoClose . "';
-                    iconTvTemplate.emptyIcon = '" . $emptyIcon . "';
-                    iconTvTemplate.baseicon = '" . $BaseIcon . "';
-                    
+                const iconTvTemplate = {};
+                    iconTvTemplate.iconsPerPage = {$iconsPerPage};
+                    iconTvTemplate.iconsAutoClose = {$iconsAutoClose};
+                    iconTvTemplate.emptyIcon = {$emptyIcon};
+                    iconTvTemplate.baseicon = {$BaseIcon};
+                            
             </script>"
             );
+            
         }
     }
 }
