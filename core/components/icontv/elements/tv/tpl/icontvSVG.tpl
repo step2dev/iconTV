@@ -2,7 +2,7 @@
     <div id="tvpaneliconTVSVG{$tv->id}" style="width:100%">
         <div id="iconTVSVG{$tv->id}"></div>
         <input id="tviconTVSVG{$tv->id}" name="tv{$tv->id}" type="text" class="textfield"
-               value="{$tv_value|escape}"{$style}
+               value="{$tv_value|escape}" {$style}
                tvtype="{$tv->type}"/>
         <div id="tvpanel{$tv->id}" style="width:100%">
             {if $destroy == 1}
@@ -19,7 +19,7 @@
 
         <div id="rendered-svg" class="thumbnail" style="max-width: 350px;">
             <div class="caption">
-                <h3>Please Select…</h3>
+                <h3>{$tv_value|escape|default: 'Please Select…'}</h3>
             </div>
             {if $preview == 1}
                 <p>Select an SVG below to see the content change.</p>
@@ -33,16 +33,12 @@
         <script>
           var svgs = {$svgs};
           var iconsSVG = '{$iconsSVG}';
-          console.log(svgs);
-          console.log(iconsSVG);
+
           if (window.jQuery) {
             jQuery(document).ready(function($) {
-              var destroySVGElement = $('#tviconTVSVG{$tv->id}').fontIconPicker({
+              var SVGElement = $('#tviconTVSVG{$tv->id}').fontIconPicker({
                 source: svgs,
                 iconGenerator: function(item, flipBoxTitle, index) {
-                  console.log(item);
-                  console.log(flipBoxTitle);
-                  console.log(index);
                   return '<i style="display: flex; align-items: center; justify-content: center; height: 100%;"><svg style="height: 32px; width: auto;" class="svg-icon ' +
                       item + '"><use xlink:href="#' + item + '"></use></svg></i>';
                 },
@@ -52,8 +48,9 @@
                     liveView = $('#rendered-svg'),
                     liveTitle = liveView.find('h3'),
                     liveImage = liveView.find('img');
+                console.log($(this).val());
                 if ('' === item) {
-                  liveTitle.html('Please Select…');
+                  liveTitle.html({$tv_value|escape|default: 'Please Select…'});
                     {if $preview == 1}
                   liveImage.attr('src', '/assets/components/icontv/placeholder.svg');
                     {/if}
@@ -64,6 +61,7 @@
                 liveImage.attr('src', iconsSVG + '/' + item + '.svg');
                   {/if}
               });
+
 
               /**
                * Destroy API
@@ -76,7 +74,7 @@
               // Attach the events
               destroyButton.on('click', function() {
                 // Destroy the picker
-                destroySVGElement.destroyPicker();
+                SVGElement.destroyPicker();
 
                 // Change appearance
                 destroyButton.hide();
@@ -85,7 +83,7 @@
 
               restoreButton.on('click', function() {
                 // Restore the picker
-                destroySVGElement.refreshPicker();
+                SVGElement.refreshPicker();
 
                 // Change appearance
                 restoreButton.hide();
@@ -93,7 +91,6 @@
               });
             });
           }
-          ;
         </script>
     </div>
 </div>

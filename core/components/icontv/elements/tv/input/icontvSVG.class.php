@@ -283,6 +283,7 @@ if (!class_exists('iconTvSVGInputRender')) {
          */
         public function process($value, array $params = array())
         {
+
             $destroy = (int)$this->modx->getOption('icontv.destroy.api', null, true);
             $path = realpath(MODX_BASE_PATH . $params['iconstvsvg']);
             if (!is_dir($path)) {
@@ -314,7 +315,7 @@ if (!class_exists('iconTvSVGInputRender')) {
             $sp = $sprite->output();
 
             $preview = (int) isset($params['SVGpreview']) ;
-
+            $this->setPlaceholder('tv_value', $value);
             $this->setPlaceholder('svgs', json_encode($svgs));
             $this->setPlaceholder('iconsSVG', $path);
             $this->setPlaceholder('sprite', $sp);
