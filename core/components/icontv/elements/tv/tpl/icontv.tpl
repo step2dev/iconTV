@@ -5,8 +5,11 @@
     <div id="tvpanel{$tv->id}" style="width:100%">
         {if $destroy == 1}
             <div class="destroy-api-buttons">
-                <button type="button" class="x-btn-text destroy-button-destroy"><i class="icon icon-trash" aria-hidden="true"></i></button>
-                <button type="button" class="x-btn-text destroy-button-restore" style="display: none;"><i class="icon icon-reply" aria-hidden="true"></i>
+                <button type="button" class="x-btn-text destroy-button-destroy">
+                    <i class="icon icon-trash" aria-hidden="true"></i
+                </button>
+                <button type="button" class="x-btn-text destroy-button-restore" style="display: none;">
+                    <i class="icon icon-reply" aria-hidden="true"></i>
                 </button>
             </div>
         {/if}
@@ -53,9 +56,9 @@
             /**
              * Destroy API
              */
-// Get the variables - Icon Picker and buttons
+            // Get the variables - Icon Picker and buttons
 
-            destroyButton = $('.destroy-button-destroy'),
+            destroyButton = $('.destroy-button-destroy');
                 restoreButton = $('.destroy-button-restore');
 
             // Attach the events

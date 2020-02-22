@@ -9,7 +9,7 @@ if (!defined('MODX_CORE_PATH')) {
 }
 
 return [
-    'name' => 'icontv',
+    'name' => 'iconTV',
     'name_lower' => 'icontv',
     'version' => '1.3.2',
     'release' => 'beta',

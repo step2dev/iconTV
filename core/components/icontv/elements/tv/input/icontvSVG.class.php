@@ -107,9 +107,9 @@ class Sprite
     public function addAllStates($filename, $row)
     {
         $this->add($filename, $this->default, $row);
-        $this->add($filename, $this->selected, $row, 1);
-        $this->add($filename, $this->hover, $row, 2);
-        $this->add($filename, $this->active, $row, 3);
+//        $this->add($filename, $this->selected, $row, 1);
+//        $this->add($filename, $this->hover, $row, 2);
+//        $this->add($filename, $this->active, $row, 3);
     }
 
     /**
@@ -136,28 +136,28 @@ class Sprite
 
         $this->maxheight = max($this->maxheight, ($this->grid * ($row + 1)));
         // Make IDs unique.
-        foreach (array('svg', 'path', 'clipPath', 'g', 'image', 'mask') as $tag) {
+        foreach (array('svg', 'path', 'clipPath', 'g', 'image', 'mask','defs') as $tag) {
             foreach ($in->getElementsByTagName($tag) as $element) {
                 $this->_prefixId($element, $prefix);
             }
         }
         // Fill all the paths.
-//        if ($fill) {
-//            foreach ($in->getElementsByTagName('path') as $element) {
-//                $style = $element->getAttribute('style');
-//                $style = preg_replace(
-//                    '/fill:#?[0-9A-Fa-f]+;/',
-//                    'fill:' . $fill . ';',
-//                    $style
-//                );
-//                $style = preg_replace(
-//                    '/stroke:#?[0-9A-Fa-f]+;/',
-//                    'stroke:' . $fill . ';',
-//                    $style
-//                );
-//                $element->setAttribute('style', $style);
-//            }
-//        }
+        //        if ($fill) {
+        //            foreach ($in->getElementsByTagName('path') as $element) {
+        //                $style = $element->getAttribute('style');
+        //                $style = preg_replace(
+        //                    '/fill:#?[0-9A-Fa-f]+;/',
+        //                    'fill:' . $fill . ';',
+        //                    $style
+        //                );
+        //                $style = preg_replace(
+        //                    '/stroke:#?[0-9A-Fa-f]+;/',
+        //                    'stroke:' . $fill . ';',
+        //                    $style
+        //                );
+        //                $element->setAttribute('style', $style);
+        //            }
+        //        }
         // Compute transformation to fit icon into sprite.
         $h = $src->getAttribute('height') ?: '400';
         $w = $src->getAttribute('width') ?: '400';
@@ -173,10 +173,10 @@ class Sprite
             '0 0 500 500'
         );
         $g->setAttribute('id', basename($filename, '.svg'));//$src->getAttribute('id'));
-                $g->setAttribute(
-                    'transform',
-                    'scale(' . $scale . ')'
-                );
+        $g->setAttribute(
+            'transform',
+            'scale(' . $scale . ')'
+        );
         foreach ($src->childNodes as $child) {
             if ($child->nodeType === XML_ELEMENT_NODE
                 && $child->tagName !== 'metadata'
@@ -223,7 +223,7 @@ class Sprite
         //            '0 0 ' . $this->maxwidth . ' ' . $this->maxheight
         //        );
         $this->out->normalizeDocument();
-        $svg =  str_replace('<?xml version="1.0"? >', '',$this->out->saveXML());
+        $svg = str_replace('<?xml version="1.0"? >', '', $this->out->saveXML());
         //$svg = $this->out->saveXML();
         return $svg;
     }
@@ -283,14 +283,15 @@ if (!class_exists('iconTvSVGInputRender')) {
          */
         public function process($value, array $params = array())
         {
-            $path = MODX_BASE_PATH . $params['iconstvsvg'];
+            $destroy = (int)$this->modx->getOption('icontv.destroy.api', null, true);
+            $path = realpath(MODX_BASE_PATH . $params['iconstvsvg']);
             if (!is_dir($path)) {
-                $path = MODX_BASE_PATH . '/assets/components/icontv/svg/';
+                $path = MODX_BASE_PATH . 'assets/components/icontv/svg/';
             }
 
             $files = new SVGFilterIterator(new FilesystemIterator($path));
 
-            $path = str_replace(MODX_BASE_PATH, '', $path);
+            $path = str_replace(MODX_BASE_PATH, '/', $path);
 
             $sprite = new Sprite();
 
@@ -312,9 +313,13 @@ if (!class_exists('iconTvSVGInputRender')) {
 
             $sp = $sprite->output();
 
+            $preview = (int) isset($params['SVGpreview']) ;
+
             $this->setPlaceholder('svgs', json_encode($svgs));
             $this->setPlaceholder('iconsSVG', $path);
             $this->setPlaceholder('sprite', $sp);
+            $this->setPlaceholder('destroy', $destroy);
+            $this->setPlaceholder('preview', $preview);
         }
     }
 }

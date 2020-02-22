@@ -2,6 +2,10 @@ Changelog for icontv.
 1.3.2
 ==============
 - Fix generate icons in template
+- Add Simple Icons thanks @Sentinel-7
+- Add destroy and restore buttons for SVG
+- Add setting for show SVG preview
+
 
 1.3.1
 ==============
