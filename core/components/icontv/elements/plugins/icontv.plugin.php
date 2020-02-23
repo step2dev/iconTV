@@ -40,7 +40,7 @@ switch ($modx->event->name) {
         $modx->event->output($corePath . 'elements/tv/inputoptions/');
         break;
     case 'OnTVOutputRenderPropertiesList':
-        $modx->event->output($corePath . 'elements/tv/properties/');
+        $modx->event->output($corePath . 'elements/tv/output/options/');
         break;
     case 'OnDocFormRender':
         $icontv->includeScriptAssets();

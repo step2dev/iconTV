@@ -5,7 +5,7 @@ ini_set('display_errors', true);
 $connector_url = $modx->getOption('assets_url') . 'components/icontv/connector.php';
 $input_properties = $this->getInputProperties();
 $path = $input_properties['iconstvsvg'];
-$preview = $input_properties['SVGpreview'];
+$preview = (bool)@$input_properties['SVGpreview'];
 $dir = realpath(MODX_BASE_PATH . $path);
 
 if (!is_dir($dir)) {
