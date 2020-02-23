@@ -69,6 +69,11 @@ if (!class_exists('iconTvInputRender')) {
                 $link .= !empty($config->fonts->integrity) ? 'integrity="' . $config->fonts->integrity . '"' : '';
                 $link .= !empty($config->fonts->crossorigin) ? 'crossorigin="' . $config->fonts->crossorigin . '"' : '';
                 $link .= '>';
+                $script = '';
+                if ($config->fonts->script){
+                    $script = "<script src=\"{$config->fonts->script}\"></script>";
+                }
+
                 $icons = (array)$config->keys;
                 if (empty($config->fonts->catalog) || ($config->fonts->catalog === false)) {
                     $icons = array_values(array_unique($icons));
@@ -78,7 +83,7 @@ if (!class_exists('iconTvInputRender')) {
             }
             $this->setPlaceholder('tv_value', $value);
             $this->setPlaceholder('icons', $icons);
-
+            $this->setPlaceholder('font_script', $script);
             $this->setPlaceholder('font_css', $link);
             $this->setPlaceholder('iconsPerPage', $iconsPerPage);
             $this->setPlaceholder('iconsAutoClose', $iconsAutoClose);

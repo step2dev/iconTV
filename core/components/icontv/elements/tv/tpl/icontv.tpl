@@ -84,3 +84,4 @@
 </script>
 <!-- /scripts -->
 {$font_css}
+{$font_script}
