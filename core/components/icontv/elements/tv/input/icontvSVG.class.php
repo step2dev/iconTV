@@ -37,7 +37,7 @@ class Sprite
      *
      * @var integer
      */
-    private $nominal = 64;
+    private $nominal = 32;
     /**
      * The SVG document we are creating.
      *
@@ -56,30 +56,6 @@ class Sprite
      * @var integer
      */
     private $maxwidth;
-    /**
-     * The default state icon color
-     *
-     * @var string
-     */
-    private $default = '#a49d95';
-    /**
-     * The selected state icon color
-     *
-     * @var string
-     */
-    private $selected = '#6a635a';
-    /**
-     * The hover state icon color
-     *
-     * @var string
-     */
-    private $hover = '#ed693b';
-    /**
-     * The active state icon color
-     *
-     * @var string
-     */
-    private $active = '#eeeeee';
 
     /**
      * Construct an empty Sprite.
@@ -93,23 +69,6 @@ class Sprite
         $root = $this->out->createElementNS(self::SVG_NS, 'svg');
         $this->out->appendChild($root);
         $root->setAttribute('xmlns', self::SVG_NS);
-        $this->maxwidth = (4 * $this->grid);
-    }
-
-    /**
-     * Load an SVG file, colorize all states, and place it at $row the sprite.
-     *
-     * @param string $filename File to load.
-     * @param integer $row Row at which to locate icon in sprite.
-     *
-     * @return void
-     */
-    public function addAllStates($filename, $row)
-    {
-        $this->add($filename, $this->default, $row);
-//        $this->add($filename, $this->selected, $row, 1);
-//        $this->add($filename, $this->hover, $row, 2);
-//        $this->add($filename, $this->active, $row, 3);
     }
 
     /**
@@ -125,46 +84,24 @@ class Sprite
     public function add($filename, $fill, $row, $col = 0)
     {
         static $gensym = 0;
-        //        //$prefix = 'x' . ($gensym++);
-        //        //if ($col==0){
         $prefix = basename($filename, '.svg');
-        //        //  var_dump(basename($filename,'.svg'));
-        //        //}
+
         $in = new DOMDocument();
         $in->load($filename);
         $src = $in->documentElement;
 
-        $this->maxheight = max($this->maxheight, ($this->grid * ($row + 1)));
         // Make IDs unique.
-        foreach (array('svg', 'path', 'clipPath', 'g', 'image', 'mask','defs') as $tag) {
+        foreach (array('svg', 'path', 'clipPath', 'g', 'image', 'mask') as $tag) {
             foreach ($in->getElementsByTagName($tag) as $element) {
                 $this->_prefixId($element, $prefix);
             }
         }
-        // Fill all the paths.
-        //        if ($fill) {
-        //            foreach ($in->getElementsByTagName('path') as $element) {
-        //                $style = $element->getAttribute('style');
-        //                $style = preg_replace(
-        //                    '/fill:#?[0-9A-Fa-f]+;/',
-        //                    'fill:' . $fill . ';',
-        //                    $style
-        //                );
-        //                $style = preg_replace(
-        //                    '/stroke:#?[0-9A-Fa-f]+;/',
-        //                    'stroke:' . $fill . ';',
-        //                    $style
-        //                );
-        //                $element->setAttribute('style', $style);
-        //            }
-        //        }
+
         // Compute transformation to fit icon into sprite.
         $h = $src->getAttribute('height') ?: '400';
         $w = $src->getAttribute('width') ?: '400';
         $scale = number_format(((float)$this->nominal * (1 - (float)(2 * self::PAD))) / (float)$h, 2, '.', '');
 
-        $x = (int)(((($col + .5) * $this->grid) / $scale) - ($w / 2));
-        $y = (int)(((($row + .5) * $this->grid) / $scale) - ($h / 2));
         // Copy source <svg> element to output <g> element.
         $g = $this->out->createElementNS(self::SVG_NS, 'symbol');
         $this->out->documentElement->appendChild($g);
@@ -177,6 +114,12 @@ class Sprite
             'transform',
             'scale(' . $scale . ')'
         );
+        //        $g->setAttribute(
+//            'height',
+//            '32px'
+//        );
+
+
         foreach ($src->childNodes as $child) {
             if ($child->nodeType === XML_ELEMENT_NODE
                 && $child->tagName !== 'metadata'
@@ -199,6 +142,7 @@ class Sprite
         if ($element->hasAttribute('id')) {
             $element->setAttribute('id', $prefix . $element->getAttribute('id'));
         }
+        //, 'defs', 'use'
         foreach (array('clip-path', 'mask') as $attr) {
             if ($element->hasAttribute($attr)) {
                 $ref = $element->getAttribute($attr);
@@ -215,13 +159,6 @@ class Sprite
      */
     public function output()
     {
-        $root = $this->out->documentElement;
-        //        $root->setAttribute('height', $this->maxheight . 'px');
-        //        $root->setAttribute('width', $this->maxwidth . 'px');
-        //        $root->setAttribute(
-        //            'viewBox',
-        //            '0 0 ' . $this->maxwidth . ' ' . $this->maxheight
-        //        );
         $this->out->normalizeDocument();
         $svg = str_replace('<?xml version="1.0"? >', '', $this->out->saveXML());
         //$svg = $this->out->saveXML();
@@ -283,7 +220,6 @@ if (!class_exists('iconTvSVGInputRender')) {
          */
         public function process($value, array $params = array())
         {
-
             $destroy = (int)$this->modx->getOption('icontv.destroy.api', null, true);
             $path = realpath(MODX_BASE_PATH . $params['iconstvsvg']);
             if (!is_dir($path)) {
@@ -295,9 +231,6 @@ if (!class_exists('iconTvSVGInputRender')) {
             $path = str_replace(MODX_BASE_PATH, '/', $path);
 
             $sprite = new Sprite();
-
-            //$s->addAllStates('x.svg', 6);
-            //$s->output();
 
             $svgs = [];
             $i = 0;
@@ -314,7 +247,7 @@ if (!class_exists('iconTvSVGInputRender')) {
 
             $sp = $sprite->output();
 
-            $preview = (int) isset($params['SVGpreview']) ;
+            $preview = (int)isset($params['SVGpreview']);
             $this->setPlaceholder('tv_value', $value);
             $this->setPlaceholder('svgs', json_encode($svgs));
             $this->setPlaceholder('iconsSVG', $path);
