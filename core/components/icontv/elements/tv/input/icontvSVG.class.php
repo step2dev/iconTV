@@ -88,6 +88,7 @@ class Sprite
 
         $in = new DOMDocument();
         $in->load($filename);
+
         $src = $in->documentElement;
 
         // Make IDs unique.
@@ -97,28 +98,25 @@ class Sprite
             }
         }
 
+        $sizes = array_combine(["min-x","min-y","width","height"],explode(" ",$src->getAttribute('viewBox')));
+        
         // Compute transformation to fit icon into sprite.
-        $h = $src->getAttribute('height') ?: '400';
-        $w = $src->getAttribute('width') ?: '400';
-        $scale = number_format(((float)$this->nominal * (1 - (float)(2 * self::PAD))) / (float)$h, 2, '.', '');
-
+        $h = $sizes['height'] ?: '512';
+        $w = $sizes['width'] ?: '512';
+        $scale = 1;
+        
         // Copy source <svg> element to output <g> element.
         $g = $this->out->createElementNS(self::SVG_NS, 'symbol');
         $this->out->documentElement->appendChild($g);
         $g->setAttribute(
             'viewBox',
-            '0 0 500 500'
+            "0 0 {$w} {$h}"
         );
         $g->setAttribute('id', basename($filename, '.svg'));//$src->getAttribute('id'));
         $g->setAttribute(
             'transform',
             'scale(' . $scale . ')'
         );
-        //        $g->setAttribute(
-//            'height',
-//            '32px'
-//        );
-
 
         foreach ($src->childNodes as $child) {
             if ($child->nodeType === XML_ELEMENT_NODE

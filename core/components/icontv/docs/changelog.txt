@@ -1,4 +1,9 @@
-Changelog for icontv.
+Changelog for iconTV
+
+1.3.3
+==============
+-Fix get SVG size
+
 1.3.2
 ==============
 - Fix generate icons in template
