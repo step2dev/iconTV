@@ -44,7 +44,7 @@ class icontvPackage
         $this->modx->initialize('mgr');
         $this->modx->getService('error', 'error.modError');
 
-        $root = dirname(dirname(__FILE__)) . '/';
+        $root = dirname(__FILE__, 2) . '/';
         $assets = $root . 'assets/components/' . $config['name_lower'] . '/';
         $core = $root . 'core/components/' . $config['name_lower'] . '/';
         //print_r('MODX3 support');

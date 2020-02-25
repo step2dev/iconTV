@@ -50,7 +50,7 @@
                     liveImage = liveView.find('img');
                 console.log($(this).val());
                 if ('' === item) {
-                  liveTitle.html({$tv_value|escape|default: 'Please Select…'});
+                  liveTitle.html("{$tv_value|escape|default: 'Please Select…'}");
                     {if $preview == 1}
                   liveImage.attr('src', '/assets/components/icontv/placeholder.svg');
                     {/if}

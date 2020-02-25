@@ -14,3 +14,8 @@
 .destroy-button-restore {
     background-color: #5cb85c
 }
+.icons-selector .selected-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
