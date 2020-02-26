@@ -6,7 +6,7 @@
  * @subpackage lexicon
  */
 
-$_lang['icons'] = 'Icons';
-$_lang['iconstv.desc'] = 'Select icons support';
-$_lang['iconstv.noSearch'] = 'Disable search';
-$_lang['iconstv.preview'] = 'Preview';
+$_lang['icons'] = 'Ikonka';
+$_lang['iconstv.desc'] = 'Wybierz wsparcie dla ikon';
+$_lang['iconstv.noSearch'] = 'Wyłącz wyszukiwanie';
+$_lang['iconstv.preview'] = 'Podgląd';
