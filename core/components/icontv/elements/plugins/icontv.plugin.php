@@ -28,7 +28,7 @@ $icontv = $modx->getService('icontv', 'IconTv', $corePath . 'model/icontv/', arr
 switch ($modx->event->name) {
     case 'OnManagerPageBeforeRender':
         $modx->controller->addLexiconTopic('icontv:default');
-        $icontv->includeScriptAssets();
+        //$icontv->includeScriptAssets();
         break;
     case 'OnTVInputRenderList':
         $modx->event->output($corePath . 'elements/tv/input/');
@@ -40,9 +40,13 @@ switch ($modx->event->name) {
         $modx->event->output($corePath . 'elements/tv/inputoptions/');
         break;
     case 'OnTVOutputRenderPropertiesList':
-        $modx->event->output($corePath . 'elements/tv/properties/');
+        $modx->event->output($corePath . 'elements/tv/output/options/');
         break;
     case 'OnDocFormRender':
         $icontv->includeScriptAssets();
+        break;
+    case 'OnTempFormRender':
+        $icontv->includeScriptAssets();
+        $icontv->includeInTemplate();
         break;
 }

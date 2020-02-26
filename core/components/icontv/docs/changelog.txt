@@ -1,4 +1,53 @@
-Changelog for icontv.
+Changelog for iconTV
+
+1.3.4
+==============
+- Fix center icons #5
+- Fix error #11
+
+1.3.3
+==============
+-Fix get SVG size
+
+1.3.2
+==============
+- Fix generate icons in template
+- Add Simple Icons thanks @Sentinel-7
+- Add destroy and restore buttons for SVG
+- Add setting for show SVG preview
+- Add output SVG
+
+1.3.1
+==============
+- Add missed icons
+
+1.3.0
+==============
+- Add support MODX3 but no update builder
+- Add few missed icons
+- Add support SVG (Works incorrectly)
+- Bug fix
+
+1.2.2-beta
+==============
+- Update fontawesome v5.8.1 to v5.11.2
+
+1.2.1-beta
+==============
+- Add destroy and restore buttons
+- Add new setting for disable search
+- Add new system settings (Automatically close, Show destroy button, Show empty icon, Number of icons per page)
+- Add Ukrainian lexicon
+- Fix Russian lexicon
+- Fix English lexicon
+- Add generator icon for template (beta)
+- Fix conflict with MODX icons
+- Fix conflict with cmpgeneratorpro
+
+1.1.1-beta
+==============
+- Add fontawesome 4.7.0
+
 1.1.0-beta
 ==============
 - Add support MIGX
