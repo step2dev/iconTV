@@ -1,0 +1,3 @@
+files:
+  - source: /core/components/icontv/lexicon/en/*.php
+    translation: /core/components/icontv/lexicon/%two_letters_code%/%original_file_name%
