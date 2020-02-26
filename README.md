@@ -7,6 +7,7 @@
 </p>
 
 [![GitHub license](https://img.shields.io/github/license/CrazyBoy49z/iconTV?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/blob/master/LICENSE)  [![Build Status](https://travis-ci.org/CrazyBoy49z/iconTV.svg?branch=master)](https://travis-ci.org/CrazyBoy49z/iconTV) ![GitHub last commit](https://img.shields.io/github/last-commit/CrazyBoy49z/iconTV?style=flat-square)
+[![Crowdin](https://badges.crowdin.net/icontv/localized.svg)](https://crowdin.com/project/icontv)
 
 ![PHP from Travis config](https://img.shields.io/travis/php-v/CrazyBoy49z/iconTV?style=flat-square)
 [![Contributors](https://img.shields.io/github/contributors/CrazyBoy49z/iconTV.svg?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/graphs/contributors) 
@@ -14,5 +15,3 @@
 [![GitHub forks](https://img.shields.io/github/forks/CrazyBoy49z/iconTV?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/network)
 
 ![https://file.finiv.in.ua/assets/files/iconv.jpg](https://file.finiv.in.ua/assets/files/iconv.jpg)
-
-translate - https://crowdin.com/project/icontv
