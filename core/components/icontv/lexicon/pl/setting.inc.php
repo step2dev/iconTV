@@ -5,13 +5,13 @@
  * @package icontv
  * @subpackage lexicon
  */
-$_lang['area_icontv.path'] = 'Path';
-$_lang['area_icontv.main'] = 'General';
-$_lang['area_icontv.setting'] = 'Configuration';
-$_lang['setting_icontv.config.svg'] = 'Config path';
-$_lang['setting_icontv.config.svg_desc'] = 'Config path';
-$_lang['setting_icontv.path.svg'] = 'Path for parser svg';
-$_lang['setting_icontv.path.svg_desc'] = 'Path for parser svg';
+$_lang['area_icontv.path'] = 'Ścieżka';
+$_lang['area_icontv.main'] = 'Główne';
+$_lang['area_icontv.setting'] = 'Konfiguracja';
+$_lang['setting_icontv.config.svg'] = 'Ścieżka konfiguracji';
+$_lang['setting_icontv.config.svg_desc'] = 'Ścieżka konfiguracji';
+$_lang['setting_icontv.path.svg'] = 'Ścieżka do parsera svg';
+$_lang['setting_icontv.path.svg_desc'] = 'Ścieżka do parsera svg';
 $_lang['setting_icontv.auto.close'] = 'Automatically close';
 $_lang['setting_icontv.auto.close_desc'] = 'Whether or not to close the icon picker automatically when clicked elsewhere.';
 $_lang['setting_icontv.theme'] = 'The theme to be used';
