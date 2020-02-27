@@ -12,15 +12,15 @@ $_lang['setting_icontv.config.svg'] = 'Ścieżka konfiguracji';
 $_lang['setting_icontv.config.svg_desc'] = 'Ścieżka konfiguracji';
 $_lang['setting_icontv.path.svg'] = 'Ścieżka do parsera svg';
 $_lang['setting_icontv.path.svg_desc'] = 'Ścieżka do parsera svg';
-$_lang['setting_icontv.auto.close'] = 'Automatically close';
-$_lang['setting_icontv.auto.close_desc'] = 'Whether or not to close the icon picker automatically when clicked elsewhere.';
-$_lang['setting_icontv.theme'] = 'The theme to be used';
-$_lang['setting_icontv.theme_desc'] = "fip-grey: The default theme. Renders beautiful grey colored icon picker. <br />
-fip-darkgrey: A deeper shade of the grey theme with CSS3 gradients, rounded corners and shadows. <br />
-fip-bootstrap: A nice icon picker theme compatible with Bootstrap. <br />
-fip-inverted: Inverted color scheme.";
-$_lang['setting_icontv.icons.per.page'] = 'Number of icons per page';
-$_lang['setting_icontv.icons.per.page_desc'] = 'Number of icons per page on the icon picker. For better appearance always provide a number in multiple of 5.';
-$_lang['setting_icontv.empty.icon'] = 'Show empty icon';
-$_lang['setting_icontv.destroy.api'] = 'Show destroy button';
+$_lang['setting_icontv.auto.close'] = 'Automatycznie zamknij';
+$_lang['setting_icontv.auto.close_desc'] = 'Czy zamknąć automatycznie selektor ikon po kliknięciu w inne miejsce.';
+$_lang['setting_icontv.theme'] = 'Motyw do wykorzystania';
+$_lang['setting_icontv.theme_desc'] = "fip-szary: domyślny motyw. Wyznacza piękny, szary kolorowy selektor ikon. <br />
+fip-ciemnoszary: głębszy cień szarego motywu z gradientami CSS3, zaokrąglonymi rogami i cieniami. <br />
+fip-bootstrap: ładny motyw do wybierania ikon kompatybilny z Bootstrap. <br />
+odwrócony: Inwertowany schemat kolorów.";
+$_lang['setting_icontv.icons.per.page'] = 'Ilość pozycji na stronie';
+$_lang['setting_icontv.icons.per.page_desc'] = 'Liczba ikon na stronie na pasku ikon. Dla lepszego wyglądu zawsze podaj liczbę w wielokrotności 5.';
+$_lang['setting_icontv.empty.icon'] = 'Pokaż pustą ikonkę';
+$_lang['setting_icontv.destroy.api'] = 'Pokaż przycisk usunięcia';
 $_lang['setting_icontv.destroy.api_desc'] = '';
