@@ -9,4 +9,4 @@
 $_lang['icons'] = 'Іконки';
 $_lang['iconstv.desc'] = 'Виберіть підтримку піктограм';
 $_lang['iconstv.noSearch'] = 'Вимкнути панель пошуку';
-$_lang['iconstv.preview'] = 'Preview';
+$_lang['iconstv.preview'] = 'Попередній перегляд';

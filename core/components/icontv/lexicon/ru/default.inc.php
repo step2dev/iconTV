@@ -9,4 +9,4 @@
 $_lang['icons'] = 'Иконки';
 $_lang['iconstv.desc'] = 'Выберите поддержку иконок';
 $_lang['iconstv.noSearch'] = 'Отключить поиск';
-$_lang['iconstv.preview'] = 'Preview';
+$_lang['iconstv.preview'] = 'Предварительный просмотр';
