@@ -5,7 +5,7 @@
  * @package icontv
  * @subpackage lexicon
  */
-$_lang['area_icontv.path'] = 'Path';
+$_lang['area_icontv.path'] = 'Шлях';
 $_lang['area_icontv.main'] = 'General';
 $_lang['area_icontv.setting'] = 'Configuration';
 $_lang['setting_icontv.config.svg'] = 'Config path';
