@@ -44,18 +44,18 @@ if (!class_exists('iconTvInputRender')) {
          */
         public function process($value, array $params = array())
         {
-            $corepath = $this->modx->getOption('icontv.core.path', null, MODX_CORE_PATH . 'components/icontv/');
-            if (!is_dir($corepath)) {
-                $corepath = MODX_CORE_PATH . 'components/icontv/';
+            $corePath = $this->modx->getOption('icontv.core.path', null, MODX_CORE_PATH . 'components/icontv/');
+            if (!is_dir($corePath)) {
+                $corePath = MODX_CORE_PATH . 'components/icontv/';
             }
 
             $iconsPerPage = $this->modx->getOption('icontv.icons.per.page', null, 20);
             $iconsAutoClose = (int)$this->modx->getOption('icontv.auto.close', null, true);
             $emptyIcon = (int)$this->modx->getOption('icontv.empty.icon', null, true);
             $destroy = (int)$this->modx->getOption('icontv.destroy.api', null, true);
-            $config_path = $this->modx->getOption('icontv.path.config', '', $corepath . 'elements/config/');
+            $config_path = $this->modx->getOption('icontv.path.config', '', $corePath . 'elements/config/');
             if (!is_dir($config_path)) {
-                $config_path = $corepath . 'elements/config/';
+                $config_path = $corePath . 'elements/config/';
             }
 
             $config_file = $config_path . htmlspecialchars($params['icons']) . '.json';
@@ -70,7 +70,7 @@ if (!class_exists('iconTvInputRender')) {
                 $link .= !empty($config->fonts->crossorigin) ? 'crossorigin="' . $config->fonts->crossorigin . '"' : '';
                 $link .= '>';
                 $script = '';
-                if ($config->fonts->script){
+                if ($config->fonts->script) {
                     $script = "<script src=\"{$config->fonts->script}\"></script>";
                 }
 

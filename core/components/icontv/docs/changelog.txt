@@ -1,5 +1,12 @@
 Changelog for iconTV
 
+1.3.5
+==============
+- Fix SVG used multiply
+- Fix issue #5
+- Fix destroy/refresh buttons
+- PSR-12
+
 1.3.4
 ==============
 - Fix center icons #5

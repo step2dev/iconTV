@@ -1,4 +1,5 @@
 <?php
+
 /**
  * IconTv Runtime Hooks
  *
@@ -21,9 +22,14 @@
  */
 $corePath = $modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/icontv/';
 /** @var IconTv $icontv */
-$icontv = $modx->getService('icontv', 'IconTv', $corePath . 'model/icontv/', array(
-    'core_path' => $corePath
-));
+$icontv = $modx->getService(
+    'icontv',
+    'IconTv',
+    $corePath . 'model/icontv/',
+    array(
+        'core_path' => $corePath
+    )
+);
 
 switch ($modx->event->name) {
     case 'OnManagerPageBeforeRender':

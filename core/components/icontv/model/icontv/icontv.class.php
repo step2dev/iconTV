@@ -26,7 +26,7 @@ class iconTv
      * The version
      * @var string $version
      */
-    public $version = '1.3.4';
+    public $version = '1.3.5';
 
     /**
      * The class options
@@ -149,7 +149,6 @@ class iconTv
             $this->modx->controller->addJavascript($jsSourceUrl . 'icontv.js?v=v' . $this->version);
             $this->modx->controller->addCss($cssSourceUrl . 'icontv.css?v=v' . $this->version);
             $this->modx->controller->addLastJavascript($jsUrl . 'icontv.jquery.js?v=v' . $this->version);
-            
         } else {
             $this->modx->controller->addJavascript($jsUrl . 'icontv.js?v=v' . $this->version);
             $this->modx->controller->addJavascript($jsUrl . 'icontvSVG.js?v=v' . $this->version);
@@ -166,7 +165,7 @@ class iconTv
             $provider = $this->modx->cacheManager->getCacheProvider('default');
             $cacheKey = 'manager-icon';
             $BaseIcon = $provider->get($cacheKey);
-           
+
             if (!$BaseIcon) {
                 $baseCSS = MODX_BASE_PATH . '/manager/templates/default/css/index.css';
                 $regexPrefix = 'icon-';
@@ -287,7 +286,7 @@ class iconTv
             $iconsPerPage = $this->modx->getOption('icontv.icons.per.page', null, 20);
             $iconsAutoClose = (int)$this->modx->getOption('icontv.auto.close', null, true);
             $emptyIcon = (int)$this->modx->getOption('icontv.empty.icon', null, true);
-          
+
             $this->modx->controller->addHtml(
                 "<script>
                 const iconTvTemplate = {};
@@ -298,7 +297,6 @@ class iconTv
                             
             </script>"
             );
-            
         }
     }
 }

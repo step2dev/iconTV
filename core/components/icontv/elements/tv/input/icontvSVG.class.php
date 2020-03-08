@@ -29,13 +29,13 @@ class Sprite
     /**
      * The horizontal/vertical center-to-center distance between icons.
      *
-     * @var integer
+     * @var int
      */
     private $grid = 80;
     /**
      * The nominal size of the icons.
      *
-     * @var integer
+     * @var int
      */
     private $nominal = 32;
     /**
@@ -47,20 +47,20 @@ class Sprite
     /**
      * The height of the resulting sprite, extended as icons are added.
      *
-     * @var integer
+     * @var int
      */
     private $maxheight = 0;
     /**
      * The width of the resulting sprite.
      *
-     * @var integer
+     * @var int
      */
     private $maxwidth;
 
     /**
      * Construct an empty Sprite.
      *
-     * @param integer $grid Size (height and width) of grid.
+     * @param int $grid Size (height and width) of grid.
      */
     public function __construct()
     {
@@ -76,18 +76,17 @@ class Sprite
      *
      * @param string $filename File to load.
      * @param mixed $fill Fill color (e.g., #FFFFFF) or false for none.
-     * @param integer $row Row at which to locate icon in sprite.
-     * @param integer $col Column at which to locate icon in sprite.
+     * @param int $row Row at which to locate icon in sprite.
+     * @param int $col Column at which to locate icon in sprite.
      *
      * @return void
      */
-    public function add($filename, $fill, $row, $col = 0)
+    public function add($fileName, $fill, $row, $col = 0)
     {
-        static $gensym = 0;
-        $prefix = basename($filename, '.svg');
+        $prefix = basename($fileName, '.svg');
 
         $in = new DOMDocument();
-        $in->load($filename);
+        $in->load($fileName);
 
         $src = $in->documentElement;
 
@@ -98,13 +97,13 @@ class Sprite
             }
         }
 
-        $sizes = array_combine(["min-x","min-y","width","height"],explode(" ",$src->getAttribute('viewBox')));
-        
+        $sizes = array_combine(['min-x', 'min-y', 'width', 'height'], explode(' ', $src->getAttribute('viewBox')));
+
         // Compute transformation to fit icon into sprite.
         $h = $sizes['height'] ?: '512';
         $w = $sizes['width'] ?: '512';
         $scale = 1;
-        
+
         // Copy source <svg> element to output <g> element.
         $g = $this->out->createElementNS(self::SVG_NS, 'symbol');
         $this->out->documentElement->appendChild($g);
@@ -112,7 +111,7 @@ class Sprite
             'viewBox',
             "0 0 {$w} {$h}"
         );
-        $g->setAttribute('id', basename($filename, '.svg'));//$src->getAttribute('id'));
+        $g->setAttribute('id', basename($fileName, '.svg'));//$src->getAttribute('id'));
         $g->setAttribute(
             'transform',
             'scale(' . $scale . ')'
@@ -158,9 +157,8 @@ class Sprite
     public function output()
     {
         $this->out->normalizeDocument();
-        $svg = str_replace('<?xml version="1.0"? >', '', $this->out->saveXML());
         //$svg = $this->out->saveXML();
-        return $svg;
+        return str_replace('<?xml version="1.0"? >', '', $this->out->saveXML());
     }
 }
 
@@ -179,7 +177,7 @@ class iconTVGetListSVGProcessor extends modProcessor
 
 class SVGFilterIterator extends FilterIterator
 {
-    function accept()
+    public function accept()
     {
         $item = $this->getInnerIterator()->current();
         return $item->isFile() && $item->getExtension() === 'svg';

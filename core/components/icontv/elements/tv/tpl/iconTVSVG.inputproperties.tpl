@@ -6,7 +6,7 @@
   var iconTvSVG = function(config) {
     config = config || {};
     config.connectorUrl = {/literal}{$connector}{literal};
-    config.default_path = {/literal}{$default_path}{literal};
+    config.defaultPath = {/literal}{$default_path}{literal};
     config.SVGpreview = {/literal}{$SVGpreview}{literal};
     iconTvSVG.superclass.constructor.call(this, config);
   };
@@ -55,7 +55,7 @@
           width: '100%',
           displayField: 'name',
           valueField: 'name',
-          defaultValue: iconTvSVG.default_path,
+          defaultValue: iconTvSVG.defaultPath,
           listeners: {
             success: {
               fn: function() {
