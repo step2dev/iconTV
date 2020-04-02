@@ -26,7 +26,7 @@ class iconTv
      * The version
      * @var string $version
      */
-    public $version = '1.3.5';
+    public $version = '1.3.6';
 
     /**
      * The class options
@@ -167,7 +167,7 @@ class iconTv
             $BaseIcon = $provider->get($cacheKey);
 
             if (!$BaseIcon) {
-                $baseCSS = MODX_BASE_PATH . '/manager/templates/default/css/index.css';
+                $baseCSS = MODX_MANAGER_PATH . '/templates/default/css/index.css';
                 $regexPrefix = 'icon-';
                 $outputPrefix = 'icon icon-';
                 $BaseIcon = array();
