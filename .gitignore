@@ -50,3 +50,4 @@ phpunit.phar
 phpunit.xml
 /build/
 .env
+/rename_it.php
