@@ -17,25 +17,27 @@ if (window.jQuery) {
    */
 
   // Attach the events
-  $('.destroy-button-destroy').on('click', function() {
-    var $id = $(this).data('id');
+  $(document).on('click', '.destroy-button-destroy', function() {
+    var $this = $(this);
+    var $id = $this.data('id');
 
     // Destroy the picker
     window['IconsTV' + $id].destroyPicker();
 
     // Change appearance
-    $(this).hide();
-    $(this).parent().find('.destroy-button-restore').fadeIn('fast');
+    $this.hide();
+    $this.parent().find('.destroy-button-restore').fadeIn('fast');
   });
 
-  $('.destroy-button-restore').on('click', function() {
-    var $id = $(this).data('id');
+  $(document).on('click', '.destroy-button-restore', function() {
+    var $this = $(this);
+    var $id = $this.data('id');
 
     // Restore the picker
     window['IconsTV' + $id].refreshPicker();
 
     // Change appearance
-    $(this).hide();
-    $(this).parent().find('.destroy-button-destroy').fadeIn('fast');
+    $this.hide();
+    $this.parent().find('.destroy-button-destroy').fadeIn('fast');
   });
 }

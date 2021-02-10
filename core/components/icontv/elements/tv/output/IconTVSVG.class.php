@@ -21,7 +21,7 @@ class IconTVSVGOutputRender extends modTemplateVarOutputRender
      * @param array $params
      * @return string
      */
-    public function process($value, array $params = array())
+    public function process($value, array $params = [])
     {
         $parseInput = $this->tv->parseInput($value);
         $inputProperty = unserialize($this->tv->input_properties);

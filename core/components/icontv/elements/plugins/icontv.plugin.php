@@ -26,9 +26,9 @@ $icontv = $modx->getService(
     'icontv',
     'IconTv',
     $corePath . 'model/icontv/',
-    array(
+    [
         'core_path' => $corePath
-    )
+    ]
 );
 
 switch ($modx->event->name) {
