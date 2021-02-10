@@ -1,7 +1,9 @@
 <?php
 
 /** @var modX $modx */
-$connectorUrl = $modx->getOption('assets_url') . 'components/icontv/connector.php';
+$assetUrl = $modx->getOption('assets_url') . 'components/icontv/';
+$corePath = $modx->getOption('core_path') . 'components/icontv/';
+$connectorUrl = $assetUrl.'connector.php';
 $modx->smarty->assign('connector', "'{$connectorUrl}'");
 $inputProperties = $this->getInputProperties();
 $icon = $inputProperties['icons'];
@@ -13,5 +15,5 @@ $modx->smarty->assign('default_icons', "'{$icon}'");
 $modx->smarty->assign('default_noSearch', "'" . isset($inputProperties['noSearch']) . "'");
 
 return $modx->smarty->fetch(
-    $modx->getOption('core_path') . 'components/icontv/elements/tv/tpl/iconTV.inputproperties.tpl'
+    $corePath.'elements/tv/tpl/iconTV.inputproperties.tpl'
 );

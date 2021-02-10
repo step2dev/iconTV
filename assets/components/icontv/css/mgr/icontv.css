@@ -19,3 +19,16 @@
     justify-content: center;
     align-items: center;
 }
+
+.tv-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 160px;
+}
+
+.icons-selector.selector-popup-wrap, .icons-selector .selector-popup-wrap{
+    position: relative!important;
+    width: auto!important;
+    padding-bottom: 30px;
+}

@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors',   true);
+//error_reporting(E_ALL);
+//ini_set('display_errors',   true);
 //if (!class_exists(modTemplateVarInputRender::class)) {
 //    class modNamespace extends MODX\Revolution\modNamespace
 //    {
@@ -142,28 +142,33 @@ class icontvPackage
             ]
         );
 
-        // Add resolvers into vehicle
-        $resolvers = scandir($this->config['resolvers']);
-        // Remove Office files
-        if (!in_array('office', $resolvers)) {
-            if ($cache = $this->modx->getCacheManager()) {
-                $dirs = [
-                    $this->config['assets'] . 'js/office',
-                    $this->config['core'] . 'controllers/office',
-                    $this->config['core'] . 'processors/office',
-                ];
-                foreach ($dirs as $dir) {
-                    $cache->deleteTree($dir, ['deleteTop' => true, 'skipDirs' => false, 'extensions' => []]);
+        if (is_dir($this->config['resolvers'])) {
+            // Add resolvers into vehicle
+            $resolvers = scandir($this->config['resolvers']);
+            // Remove Office files
+            if (is_array($resolvers)) {
+                if (!in_array('office', $resolvers, true)) {
+                    if ($cache = $this->modx->getCacheManager()) {
+                        $dirs = [
+                            $this->config['assets'].'js/office',
+                            $this->config['core'].'controllers/office',
+                            $this->config['core'].'processors/office',
+                        ];
+                        foreach ($dirs as $dir) {
+                            $cache->deleteTree($dir, ['deleteTop' => true, 'skipDirs' => false, 'extensions' => []]);
+                        }
+                    }
+                    $this->modx->log(modX::LOG_LEVEL_INFO, 'Deleted Office files');
                 }
-            }
-            $this->modx->log(modX::LOG_LEVEL_INFO, 'Deleted Office files');
-        }
-        foreach ($resolvers as $resolver) {
-            if (in_array($resolver[0], ['_', '.'])) {
-                continue;
-            }
-            if ($vehicle->resolve('php', ['source' => $this->config['resolvers'] . $resolver])) {
-                $this->modx->log(modX::LOG_LEVEL_INFO, 'Added resolver ' . preg_replace('#\.php$#', '', $resolver));
+                foreach ($resolvers as $resolver) {
+                    if (in_array($resolver[0], ['_', '.'])) {
+                        continue;
+                    }
+                    if ($vehicle->resolve('php', ['source' => $this->config['resolvers'].$resolver])) {
+                        $this->modx->log(modX::LOG_LEVEL_INFO,
+                            'Added resolver '.preg_replace('#\.php$#', '', $resolver));
+                    }
+                }
             }
         }
         $this->builder->putVehicle($vehicle);

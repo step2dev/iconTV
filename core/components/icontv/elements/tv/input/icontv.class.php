@@ -15,6 +15,7 @@ if (!class_exists(modTemplateVarInputRender::class)) {
 if (!class_exists('iconTvInputRender')) {
     class iconTvInputRender extends modTemplateVarInputRender
     {
+        //public $config;
         /**
          * Return the template path to load
          *

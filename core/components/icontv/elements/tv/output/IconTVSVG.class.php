@@ -5,7 +5,6 @@
  * @package colorpicker
  * @subpackage output_render
  */
-
 if (!class_exists(modTemplateVarOutputRender::class)) {
     class modTemplateVarOutputRender extends MODX\Revolution\modTemplateVarOutputRender
     {

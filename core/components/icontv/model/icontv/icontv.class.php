@@ -1,14 +1,14 @@
 <?php
+
 /**
- * IconTV classfile
+ * IconTV class file
  *
  * Copyright 2019 by Yurij Finiv <yura.finiv@gmail.com>
  *
  * @package icontv
  * @subpackage classfile
  */
-
-class iconTv
+class iconTV
 {
     /**
      * A reference to the modX instance
@@ -26,13 +26,13 @@ class iconTv
      * The version
      * @var string $version
      */
-    public $version = '1.3.6';
+    public $version = '1.3.8';
 
     /**
      * The class options
      * @var array $options
      */
-    public $options = array();
+    public $options = [];
 
     /**
      * IconTv constructor
@@ -40,7 +40,7 @@ class iconTv
      * @param modX $modx A reference to the modX instance.
      * @param array $options An array of options. Optional.
      */
-    public function __construct(modX &$modx, $options = array())
+    public function __construct(modX &$modx, $options = [])
     {
         $this->modx =& $modx;
         $this->namespace = $this->getOption('namespace', $options, $this->namespace);
@@ -48,17 +48,17 @@ class iconTv
         $corePath = $this->getOption(
             'core_path',
             $options,
-            $this->modx->getOption('core_path') . 'components/' . $this->namespace . '/'
+            $this->modx->getOption('core_path') . 'components/' .  strtolower($this->namespace) . '/'
         );
         $assetsPath = $this->getOption(
             'assets_path',
             $options,
-            $this->modx->getOption('assets_path') . 'components/' . $this->namespace . '/'
+            $this->modx->getOption('assets_path') . 'components/' . strtolower($this->namespace) . '/'
         );
         $assetsUrl = $this->getOption(
             'assets_url',
             $options,
-            $this->modx->getOption('assets_url') . 'components/' . $this->namespace . '/'
+            $this->modx->getOption('assets_url') . 'components/' .  strtolower($this->namespace) . '/'
         );
 
         // Load some default paths for easier management
@@ -85,9 +85,6 @@ class iconTv
             ],
             $options
         );
-
-        // Set default options
-        $this->options = array_merge($this->options, array());
 
         $this->modx->lexicon->load($this->namespace . ':default');
     }
@@ -129,7 +126,7 @@ class iconTv
         $corePath = $this->getOption('corePath');
 
         $this->modx->controller->addHtml(
-            '<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+            '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
         <!-- base | always include -->
         <link rel="stylesheet" type="text/css" href="/assets/components/icontv/css/mgr/base/jquery.fonticonpicker.min.css">
          
@@ -146,14 +143,14 @@ class iconTv
         //$config_file = $config_path . htmlspecialchars($params['icons']) . '.json';
 
         if ($this->getOption('debug') && $assetsUrl != MODX_ASSETS_URL . 'components/icontv/') {
-            $this->modx->controller->addJavascript($jsSourceUrl . 'icontv.js?v=v' . $this->version);
-            $this->modx->controller->addCss($cssSourceUrl . 'icontv.css?v=v' . $this->version);
-            $this->modx->controller->addLastJavascript($jsUrl . 'icontv.jquery.js?v=v' . $this->version);
+            $this->modx->controller->addJavascript($jsSourceUrl . 'icontv.js?v=' . $this->version);
+            $this->modx->controller->addCss($cssSourceUrl . 'icontv.css?v=' . $this->version);
+            $this->modx->controller->addLastJavascript($jsUrl . 'icontv.jquery.js?v=' . $this->version);
         } else {
-            $this->modx->controller->addJavascript($jsUrl . 'icontv.js?v=v' . $this->version);
-            $this->modx->controller->addJavascript($jsUrl . 'icontvSVG.js?v=v' . $this->version);
-            $this->modx->controller->addLastJavascript($jsUrl . 'icontv.jquery.js?v=v' . $this->version);
-            $this->modx->controller->addCss($cssUrl . 'icontv.css?v=v' . $this->version);
+            $this->modx->controller->addJavascript($jsUrl . 'icontv.js?v=' . $this->version);
+            $this->modx->controller->addJavascript($jsUrl . 'icontvSVG.js?v=' . $this->version);
+            $this->modx->controller->addLastJavascript($jsUrl . 'icontv.jquery.js?v=' . $this->version);
+            $this->modx->controller->addCss($cssUrl . 'icontv.css?v=' . $this->version);
         }
         //$this->modx->controller->addHtml('<script type="text/javascript">IconTV.config = ' . json_encode($this->options, JSON_PRETTY_PRINT) . ';</script>');
     }
@@ -175,99 +172,7 @@ class iconTv
                 //$regex = "/[^x\-btn\-icon\B]\." . $regexPrefix . "([\w-]*)/";
 
                 $css = file_get_contents($baseCSS);
-                $excludeClasses = [
-                    'ul',
-                    'li',
-                    'lg',
-                    'large',
-                    '2x',
-                    '3x',
-                    '4x',
-                    '5x',
-                    'fw',
-                    'border',
-                    'pull-left',
-                    'pull-right',
-                    'spin',
-                    'pulse',
-                    'rotate-90',
-                    'rotate-180',
-                    'rotate-270',
-                    'flip-horizontal',
-                    'flip-vertical',
-                    'stack',
-                    'stack-1x',
-                    'stack-2x',
-                    'inverse',
-                    'page_white',
-                    'file_upload',
-                    'file_manager',
-                    'key2',
-                    'propertyset',
-                    'resourcegroup',
-                    'uninstall',
-                    'ob',
-                    'graph',
-                    'chart',
-                    'prefs',
-                    'ok',
-                    'defaults',
-                    'load',
-                    'working',
-                    'folder-add',
-                    'open',
-                    'open-self',
-                    'open-popup',
-                    'open-blank',
-                    'open-download',
-                    'email',
-                    'email-compose',
-                    'coins',
-                    'clock',
-                    'extension',
-                    'function',
-                    'bulb',
-                    'bulb-off',
-                    'db-gear',
-                    'zoom',
-                    'reconfigure',
-                    'cross',
-                    'cancel',
-                    'folder-component',
-                    'expand-all',
-                    'collapse-all',
-                    'tree-orgboard',
-                    'tree-area',
-                    'tree-post',
-                    'house',
-                    'trash-empty',
-                    'trash-closed',
-                    'disk',
-                    'disk-bullet',
-                    'loading',
-                    'db-refresh',
-                    'magnifier',
-                    'stat-list',
-                    'stat-portal',
-                    'group-add',
-                    'lock-go',
-                    'wrench-orange',
-                    'grid',
-                    'admin',
-                    'del-table',
-                    'add-table',
-                    'go-tab',
-                    'del-tab',
-                    'add-tab',
-                    'save-table',
-                    'del-col',
-                    'add-col',
-                    'rename',
-                    'stat-data',
-                    'check-on',
-                    'check-off',
-                    'view-tile',
-                ];
+                $excludeClasses = $this->templateExclude();
                 if (preg_match_all($regex, $css, $matches)) {
                     $icons = array_diff($matches[1], $excludeClasses);
                     foreach ($icons as $icon) {
@@ -298,5 +203,102 @@ class iconTv
             </script>"
             );
         }
+    }
+
+    public function templateExclude()
+    {
+        return [
+            'ul',
+            'li',
+            'lg',
+            'large',
+            '2x',
+            '3x',
+            '4x',
+            '5x',
+            'fw',
+            'border',
+            'pull-left',
+            'pull-right',
+            'spin',
+            'pulse',
+            'rotate-90',
+            'rotate-180',
+            'rotate-270',
+            'flip-horizontal',
+            'flip-vertical',
+            'stack',
+            'stack-1x',
+            'stack-2x',
+            'inverse',
+            'page_white',
+            'file_upload',
+            'file_manager',
+            'key2',
+            'propertyset',
+            'resourcegroup',
+            'uninstall',
+            'ob',
+            'graph',
+            'chart',
+            'prefs',
+            'ok',
+            'defaults',
+            'load',
+            'working',
+            'folder-add',
+            'open',
+            'open-self',
+            'open-popup',
+            'open-blank',
+            'open-download',
+            'email',
+            'email-compose',
+            'coins',
+            'clock',
+            'extension',
+            'function',
+            'bulb',
+            'bulb-off',
+            'db-gear',
+            'zoom',
+            'reconfigure',
+            'cross',
+            'cancel',
+            'folder-component',
+            'expand-all',
+            'collapse-all',
+            'tree-orgboard',
+            'tree-area',
+            'tree-post',
+            'house',
+            'trash-empty',
+            'trash-closed',
+            'disk',
+            'disk-bullet',
+            'loading',
+            'db-refresh',
+            'magnifier',
+            'stat-list',
+            'stat-portal',
+            'group-add',
+            'lock-go',
+            'wrench-orange',
+            'grid',
+            'admin',
+            'del-table',
+            'add-table',
+            'go-tab',
+            'del-tab',
+            'add-tab',
+            'save-table',
+            'del-col',
+            'add-col',
+            'rename',
+            'stat-data',
+            'check-on',
+            'check-off',
+            'view-tile',
+        ];
     }
 }

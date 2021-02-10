@@ -18,41 +18,49 @@
  * @event OnTVOutputRenderPropertiesList
  * @event OnDocFormRender
  *
+ * @var iconTV $iconTV
  * @var modX $modx
  */
-$corePath = $modx->getOption('core_path', null, MODX_CORE_PATH) . 'components/icontv/';
-/** @var IconTv $icontv */
-$icontv = $modx->getService(
-    'icontv',
-    'IconTv',
-    $corePath . 'model/icontv/',
-    [
-        'core_path' => $corePath
-    ]
-);
+try {
+    $corePath = $modx->getOption('core_path', null, MODX_CORE_PATH).'components/icontv/';
 
-switch ($modx->event->name) {
-    case 'OnManagerPageBeforeRender':
-        $modx->controller->addLexiconTopic('icontv:default');
-        //$icontv->includeScriptAssets();
-        break;
-    case 'OnTVInputRenderList':
-        $modx->event->output($corePath . 'elements/tv/input/');
-        break;
-    case 'OnTVOutputRenderList':
-        $modx->event->output($corePath . 'elements/tv/output/');
-        break;
-    case 'OnTVInputPropertiesList':
-        $modx->event->output($corePath . 'elements/tv/inputoptions/');
-        break;
-    case 'OnTVOutputRenderPropertiesList':
-        $modx->event->output($corePath . 'elements/tv/output/options/');
-        break;
-    case 'OnDocFormRender':
-        $icontv->includeScriptAssets();
-        break;
-    case 'OnTempFormRender':
-        $icontv->includeScriptAssets();
-        $icontv->includeInTemplate();
-        break;
+    //$iconTV = $modx->loadClass('icontv.iconTV',$corePath . 'model/icontv/');
+
+    $iconTV = $modx->getService(
+        'icontv',
+        'iconTV',
+        $corePath . 'model/icontv/',
+        [
+            'core_path' => $corePath
+        ]
+    );
+
+
+    switch ($modx->event->name) {
+        case 'OnManagerPageBeforeRender':
+            $modx->controller->addLexiconTopic('icontv:default');
+            //$iconTV->includeScriptAssets();
+            break;
+        case 'OnTVInputRenderList':
+            $modx->event->output($corePath.'elements/tv/input/');
+            break;
+        case 'OnTVOutputRenderList':
+            $modx->event->output($corePath.'elements/tv/output/');
+            break;
+        case 'OnTVInputPropertiesList':
+            $modx->event->output($corePath.'elements/tv/inputoptions/');
+            break;
+        case 'OnTVOutputRenderPropertiesList':
+            $modx->event->output($corePath.'elements/tv/output/options/');
+            break;
+        case 'OnDocFormRender':
+            $iconTV->includeScriptAssets();
+            break;
+        case 'OnTempFormRender':
+            $iconTV->includeScriptAssets();
+            $iconTV->includeInTemplate();
+            break;
+    }
+} catch (\Exception $e) {
+    $modx->log(modX::LOG_LEVEL_ERROR, $e->getMessage());
 }

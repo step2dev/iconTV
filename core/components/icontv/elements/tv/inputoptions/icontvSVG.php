@@ -1,10 +1,14 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set('display_errors', true);
+//error_reporting(E_ALL);
+//ini_set('display_errors', true);
 
 /** @var modX $modx */
-$connectorUrl = $modx->getOption('assets_url') . 'components/icontv/connector.php';
+/** @noinspection PhpUndefinedMethodInspection */
+$assetUrl = $modx->getOption('assets_url') . 'components/icontv/';
+/** @noinspection PhpUndefinedMethodInspection */
+$corePath = $modx->getOption('core_path') . 'components/icontv/';
+$connectorUrl = $assetUrl.'connector.php';
 $inputProperties = $this->getInputProperties();
 $path = $inputProperties['iconstvsvg'];
 $preview = (bool)@$inputProperties['SVGpreview'];
@@ -18,5 +22,5 @@ $modx->smarty->assign('default_path', "'{$path}'");
 $modx->smarty->assign('SVGpreview', "'{$preview}'");
 
 return $modx->smarty->fetch(
-    $modx->getOption('core_path') . 'components/icontv/elements/tv/tpl/iconTVSVG.inputproperties.tpl'
+    $corePath.'/elements/tv/tpl/iconTVSVG.inputproperties.tpl'
 );
