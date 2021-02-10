@@ -1,8 +1,6 @@
 <?php
 
-/*
-* @var modX $modx
-*/
+/** @var modX $modx */
 $connectorUrl = $modx->getOption('assets_url') . 'components/icontv/connector.php';
 $modx->smarty->assign('connector', "'{$connectorUrl}'");
 $inputProperties = $this->getInputProperties();
