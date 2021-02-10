@@ -2,6 +2,10 @@
 
 error_reporting(E_ALL);
 ini_set('display_errors', true);
+
+/*
+* @var modX $modx
+*/
 $connectorUrl = $modx->getOption('assets_url') . 'components/icontv/connector.php';
 $inputProperties = $this->getInputProperties();
 $path = $inputProperties['iconstvsvg'];

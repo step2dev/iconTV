@@ -5,7 +5,6 @@
  * @package colorpicker
  * @subpackage processor
  */
-
 class IconTvTVsGetListProcessor extends modObjectGetListProcessor
 {
     public $classKey = 'modTemplateVar';
