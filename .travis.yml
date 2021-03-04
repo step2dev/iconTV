@@ -4,6 +4,8 @@ language: php
 
 # Define the php versions against we want to test our code
 php:
+  - 8.0
+  - 7.4
   - 7.3
   - 7.2
   - 7.1
@@ -17,6 +19,10 @@ php:
 
 install:
   - travis_retry composer install --no-interaction --no-suggest
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
 # Testing the app (see phpunit.xml) for configs, generating Code Coverage report
 script:
