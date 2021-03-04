@@ -1,5 +1,5 @@
 # Config file for https://travis-ci.org/
-dist: trusty
+dist: xenial
 language: php
 
 # Define the php versions against we want to test our code
@@ -11,8 +11,6 @@ php:
   - 7.1
   - 7.0
   - 5.6
-  - 5.5
-  - 5.4
   - nightly
 
 # Note: Code coverage requires php-xDebug extension enabled on CI server
