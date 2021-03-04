@@ -1,5 +1,4 @@
 # Config file for https://travis-ci.org/
-dist: xenial
 language: php
 
 # Define the php versions against we want to test our code
@@ -17,7 +16,6 @@ php:
 
 install:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --no-suggest
 
 # Testing the app (see phpunit.xml) for configs, generating Code Coverage report
 script:
