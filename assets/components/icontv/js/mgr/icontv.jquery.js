@@ -1,5 +1,5 @@
 if (window.jQuery) {
-  jQuery(document).ready(function ($) {
+  jQuery(document).ready(function () {
     if (typeof iconTvTemplate !== 'undefined') {
       jQuery('#modx-template-icon').fontIconPicker({
         source: iconTvTemplate.baseicon,
