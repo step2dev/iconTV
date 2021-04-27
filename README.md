@@ -15,4 +15,6 @@
 [![GitHub issues](https://img.shields.io/github/issues/CrazyBoy49z/iconTV?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/issues)[![GitHub stars](https://img.shields.io/github/stars/CrazyBoy49z/iconTV?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/CrazyBoy49z/iconTV?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/network)
 
+Creating a new type of TV with icons
+
 ![https://file.finiv.in.ua/assets/files/iconv.jpg](https://file.finiv.in.ua/assets/files/iconv.jpg)
