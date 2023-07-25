@@ -1,4 +1,5 @@
 <?php
+/** @noinspection FileClassnameCaseInspection */
 
 /**
  * IconTV class file

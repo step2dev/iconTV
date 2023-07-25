@@ -19,7 +19,7 @@ class Sprite
      *
      * @var string
      */
-    const SVG_NS = 'http://www.w3.org/2000/svg';
+    public const SVG_NS = 'http://www.w3.org/2000/svg';
     /**
      * Fraction of icon size to pad icons with.
      *
@@ -28,34 +28,24 @@ class Sprite
     const PAD = 0.05;
     /**
      * The horizontal/vertical center-to-center distance between icons.
-     *
-     * @var int
      */
-    private $grid = 80;
+    private int $grid = 80;
     /**
      * The nominal size of the icons.
-     *
-     * @var int
      */
-    private $nominal = 32;
+    private int $nominal = 32;
     /**
      * The SVG document we are creating.
-     *
-     * @var DOMDocument
      */
-    private $out;
+    private DOMDocument $out;
     /**
      * The height of the resulting sprite, extended as icons are added.
-     *
-     * @var int
      */
-    private $maxheight = 0;
+    private int $maxheight = 0;
     /**
      * The width of the resulting sprite.
-     *
-     * @var int
      */
-    private $maxwidth;
+    private int $maxwidth;
 
     /**
      * Construct an empty Sprite.
@@ -81,7 +71,7 @@ class Sprite
      *
      * @return void
      */
-    public function add($fileName, $fill, $row, $col = 0)
+    public function add(string $fileName, $fill, $row, $col = 0)
     {
         $prefix = basename($fileName, '.svg');
 
@@ -91,7 +81,7 @@ class Sprite
         $src = $in->documentElement;
 
         // Make IDs unique.
-        foreach (array('svg', 'path', 'clipPath', 'g', 'image', 'mask') as $tag) {
+        foreach (['svg', 'path', 'clipPath', 'g', 'image', 'mask'] as $tag) {
             foreach ($in->getElementsByTagName($tag) as $element) {
                 $this->_prefixId($element, $prefix);
             }
@@ -114,7 +104,7 @@ class Sprite
         $g->setAttribute('id', basename($fileName, '.svg'));//$src->getAttribute('id'));
         $g->setAttribute(
             'transform',
-            'scale(' . $scale . ')'
+            'scale('.$scale.')'
         );
 
         foreach ($src->childNodes as $child) {
@@ -134,35 +124,46 @@ class Sprite
      *
      * @return void
      */
-    private function _prefixId(DOMElement $element, $prefix)
+    private function prefixId(DOMElement $element, string $prefix): void
     {
-        if ($element->hasAttribute('id')) {
-            $element->setAttribute('id', $prefix . $element->getAttribute('id'));
+        $this->setPrefixedAttribute($element, 'id', $prefix);
+
+        foreach (['clip-path', 'mask'] as $attr) {
+            $this->setPrefixedAttribute($element, $attr, $prefix, 'url(#', 'url(#' . $prefix);
         }
-        //, 'defs', 'use'
-        foreach (array('clip-path', 'mask') as $attr) {
-            if ($element->hasAttribute($attr)) {
-                $ref = $element->getAttribute($attr);
-                $ref = str_replace('url(#', 'url(#' . $prefix, $ref);
-                $element->setAttribute($attr, $ref);
-            }
+    }
+
+    /**
+     * @deprecated Use prefixId() instead.
+     */
+    private function _prefixId(DOMElement $element, string $prefix): void
+    {
+        $this->prefixId($element,$prefix);
+    }
+
+    private function setPrefixedAttribute(DOMElement $element, string $attr, string $prefix, string $strToReplace = '', string $replacement = ''): void
+    {
+        if ($element->hasAttribute($attr)) {
+            $newValue = $strToReplace ? str_replace($strToReplace, $replacement, $element->getAttribute($attr)) : $prefix . $element->getAttribute($attr);
+            $element->setAttribute($attr, $newValue);
         }
     }
 
     /**
      * Echo the resulting Sprite.
      *
-     * @return void
+     * @return array|false|string|string[]|void
      */
     public function output()
     {
         $this->out->normalizeDocument();
+
         //$svg = $this->out->saveXML();
         return str_replace('<?xml version="1.0"? >', '', $this->out->saveXML());
     }
 }
 
-if (!class_exists(modTemplateVarInputRender::class)) {
+if (! class_exists(modTemplateVarInputRender::class)) {
     class modTemplateVarInputRender extends MODX\Revolution\modTemplateVarInputRender
     {
     }
@@ -180,11 +181,12 @@ class SVGFilterIterator extends FilterIterator
     public function accept()
     {
         $item = $this->getInnerIterator()->current();
+
         return $item->isFile() && $item->getExtension() === 'svg';
     }
 }
 
-if (!class_exists('iconTvSVGInputRender')) {
+if (! class_exists('iconTvSVGInputRender')) {
     class iconTvSVGInputRender extends modTemplateVarInputRender
     {
         /**
@@ -194,7 +196,7 @@ if (!class_exists('iconTvSVGInputRender')) {
          */
         public function getTemplate()
         {
-            return $this->modx->getOption('core_path') . 'components/icontv/elements/tv/tpl/icontvSVG.tpl';
+            return $this->modx->getOption('core_path').'components/icontv/elements/tv/tpl/icontvSVG.tpl';
         }
 
         /**
@@ -204,7 +206,7 @@ if (!class_exists('iconTvSVGInputRender')) {
          */
         public function getLexiconTopics()
         {
-            return array('icontv:default');
+            return ['icontv:default'];
         }
 
         /**
@@ -214,12 +216,12 @@ if (!class_exists('iconTvSVGInputRender')) {
          * @param array $params
          * @return void
          */
-        public function process($value, array $params = array())
+        public function process($value, array $params = [])
         {
-            $destroy = (int)$this->modx->getOption('icontv.destroy.api', null, true);
-            $path = realpath(MODX_BASE_PATH . $params['iconstvsvg']);
-            if (!is_dir($path)) {
-                $path = MODX_BASE_PATH . 'assets/components/icontv/svg/';
+            $destroy = (int) $this->modx->getOption('icontv.destroy.api', null, true);
+            $path = realpath(MODX_BASE_PATH.$params['iconstvsvg']);
+            if (! is_dir($path)) {
+                $path = MODX_BASE_PATH.'assets/components/icontv/svg/';
             }
 
             $files = new SVGFilterIterator(new FilesystemIterator($path));
@@ -243,7 +245,7 @@ if (!class_exists('iconTvSVGInputRender')) {
 
             $sp = $sprite->output();
 
-            $preview = (int)isset($params['SVGpreview']);
+            $preview = (int) isset($params['SVGpreview']);
             $this->setPlaceholder('tv_value', $value);
             $this->setPlaceholder('svgs', json_encode($svgs));
             $this->setPlaceholder('iconsSVG', $path);
@@ -253,4 +255,5 @@ if (!class_exists('iconTvSVGInputRender')) {
         }
     }
 }
+
 return 'iconTvSVGInputRender';
