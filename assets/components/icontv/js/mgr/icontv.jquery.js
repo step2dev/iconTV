@@ -12,7 +12,6 @@ window.addEventListener('load', function () {
         }
     }
 })
-
 /**
  * Destroy/Restore API
  */
