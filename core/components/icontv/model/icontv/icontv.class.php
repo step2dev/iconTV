@@ -26,7 +26,7 @@ class iconTV
      * The version
      * @var string $version
      */
-    public $version = '1.3.8';
+    public $version = '1.3.9';
 
     /**
      * The class options
