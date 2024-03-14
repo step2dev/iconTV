@@ -6,7 +6,8 @@
   </a> 
 </p>
 
-[![GitHub license](https://img.shields.io/github/license/CrazyBoy49z/iconTV?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/blob/master/LICENSE)  [![Build Status](https://travis-ci.org/CrazyBoy49z/iconTV.svg?branch=master)](https://travis-ci.org/CrazyBoy49z/iconTV) ![GitHub last commit](https://img.shields.io/github/last-commit/CrazyBoy49z/iconTV?style=flat-square)
+[![GitHub license](https://img.shields.io/github/license/CrazyBoy49z/iconTV?style=flat-square)](https://github.com/CrazyBoy49z/iconTV/blob/master/LICENSE) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FCrazyBoy49z%2FiconTV.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FCrazyBoy49z%2FiconTV?ref=badge_shield)
+ [![Build Status](https://travis-ci.org/CrazyBoy49z/iconTV.svg?branch=master)](https://travis-ci.org/CrazyBoy49z/iconTV) ![GitHub last commit](https://img.shields.io/github/last-commit/CrazyBoy49z/iconTV?style=flat-square)
 [![Crowdin](https://badges.crowdin.net/icontv/localized.svg)](https://crowdin.com/project/icontv)
 [![CodeFactor](https://www.codefactor.io/repository/github/crazyboy49z/icontv/badge)](https://www.codefactor.io/repository/github/crazyboy49z/icontv)
 
@@ -18,3 +19,7 @@
 Creating a new type of TV with icons
 
 ![https://file.finiv.in.ua/assets/files/iconv.jpg](https://file.finiv.in.ua/assets/files/iconv.jpg)
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FCrazyBoy49z%2FiconTV.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FCrazyBoy49z%2FiconTV?ref=badge_large)
